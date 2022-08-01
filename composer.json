@@ -15,6 +15,7 @@
     ],
     "require": {
         "php": ">=8.0.2",
+        "ext-zlib": "*",
         "guzzlehttp/guzzle": "^7.4",
         "pimple/pimple": "^3.5"
     },

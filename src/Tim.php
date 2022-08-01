@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace Chenjiacheng\Tim;
 
+use Chenjiacheng\Tim\Provider\AccountServiceProvider;
 use Chenjiacheng\Tim\Provider\ConfigServiceProvider;
 use Pimple\Container;
 
+/**
+ * @property array $config
+ * @property \Chenjiacheng\Tim\Service\Account $account
+ */
 class Tim extends Container
 {
     /**
@@ -14,7 +19,9 @@ class Tim extends Container
      *
      * @var array|string[]
      */
-    protected array $providers = [];
+    protected array $providers = [
+        AccountServiceProvider::class,
+    ];
 
     /**
      * @var array
