@@ -6,11 +6,15 @@ namespace Chenjiacheng\Tim;
 
 use Chenjiacheng\Tim\Provider\AccountServiceProvider;
 use Chenjiacheng\Tim\Provider\ConfigServiceProvider;
+use Chenjiacheng\Tim\Provider\ProfileServiceProvider;
+use Chenjiacheng\Tim\Service\Account;
+use Chenjiacheng\Tim\Service\Profile;
 use Pimple\Container;
 
 /**
  * @property array $config
- * @property \Chenjiacheng\Tim\Service\Account $account
+ * @property Account $account
+ * @property Profile $profile
  */
 class Tim extends Container
 {
@@ -21,6 +25,7 @@ class Tim extends Container
      */
     protected array $providers = [
         AccountServiceProvider::class,
+        ProfileServiceProvider::class,
     ];
 
     /**
