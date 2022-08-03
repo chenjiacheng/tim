@@ -9,7 +9,7 @@ use Chenjiacheng\Tim\Support\Arr;
 use Chenjiacheng\Tim\Support\Collection;
 use GuzzleHttp\Exception\GuzzleException;
 
-class Profile extends BaseService
+class Profile extends AbstractService
 {
     /**
      * 设置资料

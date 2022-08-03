@@ -9,7 +9,7 @@ use Chenjiacheng\Tim\Support\Arr;
 use Chenjiacheng\Tim\Support\Collection;
 use GuzzleHttp\Exception\GuzzleException;
 
-class Account extends BaseService
+class Account extends AbstractService
 {
     /**
      * 导入单个帐号

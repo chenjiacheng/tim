@@ -10,7 +10,7 @@ use Chenjiacheng\Tim\Tim;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
-abstract class BaseService
+abstract class AbstractService
 {
     protected Tim $app;
 
