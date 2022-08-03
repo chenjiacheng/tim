@@ -6,11 +6,12 @@ namespace Chenjiacheng\Tim\Service\Message;
 
 use Chenjiacheng\Tim\Contract\MessageElemInterface;
 use Chenjiacheng\Tim\Contract\MessageInterface;
+use Chenjiacheng\Tim\Exception\InvalidConfigException;
 use Chenjiacheng\Tim\Service\AbstractService;
-use Chenjiacheng\Tim\Support\Arr;
 use Chenjiacheng\Tim\Support\Collection;
 use Chenjiacheng\Tim\Tim;
 use Chenjiacheng\Tim\Traits\MessageTrait;
+use GuzzleHttp\Exception\GuzzleException;
 
 class Account extends AbstractService implements MessageInterface
 {
@@ -36,8 +37,7 @@ class Account extends AbstractService implements MessageInterface
     public string $fromAccount;
 
     /**
-     * Account constructor.
-     * @param \Chenjiacheng\Tim\Tim $app
+     * @param Tim $app
      * @param array|string|int $toAccount
      */
     public function __construct(Tim $app, array|string|int $toAccount)
@@ -60,48 +60,37 @@ class Account extends AbstractService implements MessageInterface
      */
     public function setFromAccount(string|int $fromAccount): static
     {
-        $this->fromAccount = $fromAccount;
+        $this->fromAccount = (string)$fromAccount;
         return $this;
     }
 
     /**
-     * @param \Chenjiacheng\Tim\Contract\MessageElemInterface $elem
-     * @return \Chenjiacheng\Tim\Support\Collection
-     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @param MessageElemInterface $elem
+     *
+     * @return Collection
+     *
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function sendMsg(MessageElemInterface $elem): Collection
     {
         $data = [
-            'SyncOtherMachine' => $this->syncOtherMachine,
-            'To_Account'       => $this->toAccount,
-            'MsgLifeTime'      => $this->msgLifeTime,
-            'MsgSeq'           => $this->getMsgSeq(),
-            'MsgRandom'        => $this->getMsgRandom(),
-            'MsgBody'          => [
+            'To_Account' => $this->toAccount,
+            'MsgRandom'  => $this->getMsgRandom(),
+            'MsgBody'    => [
                 $elem->output()
             ]
         ];
 
-        if (!empty($this->fromAccount)) {
-            $data['From_Account'] = $this->fromAccount;
-        }
-
-        if (!empty($this->forbidCallbackControl)) {
-            $data['ForbidCallbackControl'] = $this->forbidCallbackControl;
-        }
-
-        if (!empty($this->sendMsgControl)) {
-            $data['SendMsgControl'] = $this->sendMsgControl;
-        }
-
-        if (!empty($this->cloudCustomData)) {
-            $data['CloudCustomData'] = $this->cloudCustomData;
-        }
-
-        if (!empty($this->offlinePushInfo)) {
-            $data['OfflinePushInfo'] = $this->offlinePushInfo;
-        }
+        !empty($this->syncOtherMachine) && $data['SyncOtherMachine'] = $this->syncOtherMachine;
+        !empty($this->syncFromOldSystem) && $data['SyncFromOldSystem'] = $this->syncFromOldSystem;
+        !empty($this->fromAccount) && $data['From_Account'] = $this->fromAccount;
+        !empty($this->msgLifeTime) && $data['MsgLifeTime'] = $this->msgLifeTime;
+        !empty($this->msgSeq) && $data['MsgSeq'] = $this->msgSeq;
+        !empty($this->forbidCallbackControl) && $data['ForbidCallbackControl'] = $this->forbidCallbackControl;
+        !empty($this->sendMsgControl) && $data['SendMsgControl'] = $this->sendMsgControl;
+        !empty($this->cloudCustomData) && $data['CloudCustomData'] = $this->cloudCustomData;
+        !empty($this->offlinePushInfo) && $data['OfflinePushInfo'] = $this->offlinePushInfo;
 
         return $this->httpPostJson($this->uri, $data);
     }

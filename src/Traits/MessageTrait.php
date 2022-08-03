@@ -22,7 +22,15 @@ trait MessageTrait
      *
      * @var int
      */
-    protected int $syncOtherMachine = 1;
+    protected int $syncOtherMachine;
+
+    /**
+     * 该字段只能填1或2，其他值是非法值
+     * 1：表示实时消息导入，消息计入未读计数
+     * 2：表示历史消息导入，消息不计入未读
+     * @var int
+     */
+    protected int $syncFromOldSystem;
 
     /**
      * 消息离线保存时长（单位：秒），最长为7天（604800秒）
@@ -32,7 +40,14 @@ trait MessageTrait
      *
      * @var int
      */
-    protected int $msgLifeTime = 604800;
+    protected int $msgLifeTime;
+
+    /**
+     * 消息序列号（32位无符号整数），后台会根据该字段去重及进行同秒内消息的排序，详细规则请看本接口的功能说明。若不填该字段，则由后台填入随机数
+     *
+     * @var int
+     */
+    protected int $msgSeq;
 
     /**
      * 消息回调禁止开关，只对本条消息有效
@@ -206,11 +221,6 @@ trait MessageTrait
         return rand(100000000, 999999999);
     }
 
-    public function getMsgSeq(): int
-    {
-        return rand(100000000, 999999999);
-    }
-
     /**
      * @param bool $bool false 表示禁止发消息前回调
      *
@@ -285,6 +295,38 @@ trait MessageTrait
     public function setOfflinePushInfo(array $offlinePushInfo): static
     {
         $this->offlinePushInfo = $offlinePushInfo;
+        return $this;
+    }
+
+    /**
+     * @param int $msgLifeTime 消息离线保存时长（单位：秒），最长为7天（604800秒）若设置该字段为0，则消息只发在线用户，不保存离线
+     *
+     * @return $this
+     */
+    public function setMsgLifeTime(int $msgLifeTime = 604800): static
+    {
+        $this->msgLifeTime = $msgLifeTime;
+        return $this;
+    }
+
+    /**
+     * @param int $msgSeq
+     *
+     * @return $this
+     */
+    public function setMsgSeq(int $msgSeq): static
+    {
+        $this->msgSeq = $msgSeq;
+        return $this;
+    }
+
+    /**
+     * @param int $syncFromOldSystem
+     * @return MessageTrait
+     */
+    public function setSyncFromOldSystem(int $syncFromOldSystem = 1): MessageTrait
+    {
+        $this->syncFromOldSystem = $syncFromOldSystem;
         return $this;
     }
 }

@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 class TimTest extends TestCase
 {
     protected array $config = [
-        'sdkappid'   => '1400000000',
+        'sdkappid'   => '1400708817',
         'key'        => 'd182df719a269501ec4795f980aa3691cae60412335058c161c3467d3cb0f565',
         'identifier' => 'administrator',
     ];
