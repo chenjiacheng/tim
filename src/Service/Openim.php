@@ -77,7 +77,7 @@ class Openim extends AbstractService
         ];
 
         isset($syncOtherMachine) && $data['SyncOtherMachine'] = $syncOtherMachine;
-        isset($fromAccount) && $data['From_Account'] = $fromAccount;
+        isset($fromAccount) && $data['From_Account'] = (string)$fromAccount;
         isset($msgLifeTime) && $data['MsgLifeTime'] = $msgLifeTime;
         isset($this->msgSeq) && $data['MsgSeq'] = $this->msgSeq;
         isset($this->forbidCallbackControl) && $data['ForbidCallbackControl'] = $this->forbidCallbackControl;

@@ -8,9 +8,11 @@ use Chenjiacheng\Tim\Provider\AccountServiceProvider;
 use Chenjiacheng\Tim\Provider\ConfigServiceProvider;
 use Chenjiacheng\Tim\Provider\OpenimServiceProvider;
 use Chenjiacheng\Tim\Provider\ProfileServiceProvider;
+use Chenjiacheng\Tim\Provider\PushServiceProvider;
 use Chenjiacheng\Tim\Service\Account;
 use Chenjiacheng\Tim\Service\Openim;
 use Chenjiacheng\Tim\Service\Profile;
+use Chenjiacheng\Tim\Service\Push;
 use Pimple\Container;
 
 /**
@@ -18,6 +20,7 @@ use Pimple\Container;
  * @property Account $account
  * @property Openim $openim
  * @property Profile $profile
+ * @property Push $push
  */
 class Tim extends Container
 {
@@ -30,6 +33,7 @@ class Tim extends Container
         AccountServiceProvider::class,
         OpenimServiceProvider::class,
         ProfileServiceProvider::class,
+        PushServiceProvider::class,
     ];
 
     /**
