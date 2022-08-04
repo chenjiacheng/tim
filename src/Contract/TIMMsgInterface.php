@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chenjiacheng\Tim\Contract;
 
-interface MessageElemInterface
+interface TIMMsgInterface
 {
     /**
      * @return array

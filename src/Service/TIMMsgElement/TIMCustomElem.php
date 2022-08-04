@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Chenjiacheng\Tim\Service\Message\Elem;
+namespace Chenjiacheng\Tim\Service\TIMMsgElement;
 
-use Chenjiacheng\Tim\Contract\MessageElemInterface;
+use Chenjiacheng\Tim\Contract\TIMMsgInterface;
 use JetBrains\PhpStorm\ArrayShape;
 
-class TIMCustomElem implements MessageElemInterface
+class TIMCustomElem implements TIMMsgInterface
 {
     protected string $data;
     protected string $desc;

@@ -97,4 +97,22 @@ abstract class AbstractService
 
         return str_replace(array_keys($replace), array_values($replace), base64_encode($compressed));
     }
+
+    /**
+     * 获取随机UUID
+     *
+     * @return string
+     */
+    public function getUUID(): string
+    {
+        return (microtime(true) * 1000) . '_' . rand(100000000, 999999999);
+    }
+
+    /**
+     * @return int
+     */
+    public function getRandom(): int
+    {
+        return rand(100000000, 999999999);
+    }
 }

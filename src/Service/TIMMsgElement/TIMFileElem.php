@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Chenjiacheng\Tim\Service\Message\Elem;
+namespace Chenjiacheng\Tim\Service\TIMMsgElement;
 
-use Chenjiacheng\Tim\Contract\MessageElemInterface;
+use Chenjiacheng\Tim\Contract\TIMMsgInterface;
 use JetBrains\PhpStorm\ArrayShape;
 
-class TIMFileElem implements MessageElemInterface
+class TIMFileElem implements TIMMsgInterface
 {
     protected string $url;
     protected string $uuid;
