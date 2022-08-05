@@ -7,7 +7,7 @@ namespace Chenjiacheng\Tim\Tests\Service;
 use Chenjiacheng\Tim\Tests\TimTest;
 use Chenjiacheng\Tim\Tim;
 
-class ConversationTest extends TimTest
+class ContactTest extends TimTest
 {
     /**
      * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
@@ -17,7 +17,7 @@ class ConversationTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->conversation->getList('105');
+        $result = $tim->contact->getList('105');
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -29,7 +29,7 @@ class ConversationTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->conversation->deleteC2C('105', '106');
+        $result = $tim->contact->deleteC2C('105', '106');
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -41,7 +41,7 @@ class ConversationTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->conversation->deleteG2C('105', '@#123456');
+        $result = $tim->contact->deleteG2C('105', '@#123456');
         $this->assertSame('OK', $result['ActionStatus']);
     }
 }

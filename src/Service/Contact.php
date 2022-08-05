@@ -8,7 +8,7 @@ use Chenjiacheng\Tim\Exception\InvalidConfigException;
 use Chenjiacheng\Tim\Support\Collection;
 use GuzzleHttp\Exception\GuzzleException;
 
-class Conversation extends AbstractService
+class Contact extends AbstractService
 {
     /**
      * 拉取会话列表
