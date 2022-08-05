@@ -223,7 +223,7 @@ class Push extends AbstractService
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function removeAllTag(array|string|int $toAccount): Collection
+    public function removeAllTags(array|string|int $toAccount): Collection
     {
         return $this->httpPostJson(
             'v4/all_member_push/im_remove_all_tags',
