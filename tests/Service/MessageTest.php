@@ -7,7 +7,7 @@ namespace Chenjiacheng\Tim\Tests\Service;
 use Chenjiacheng\Tim\Tests\TimTest;
 use Chenjiacheng\Tim\Tim;
 
-class OpenimTest extends TimTest
+class MessageTest extends TimTest
 {
     /**
      * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
@@ -17,14 +17,14 @@ class OpenimTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->openim->setTIMTextElem('haha')->sendMsg('105');
+        $result = $tim->message->setTIMTextElem('haha')->sendMsg('105');
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->openim->setTIMTextElem('haha')
+        $result = $tim->message->setTIMTextElem('haha')
             ->setTIMLocationElem('深圳', 114.05, 22.55)->sendMsg(106);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->openim->setTIMTextElem('haha')
+        $result = $tim->message->setTIMTextElem('haha')
             ->setTIMLocationElem('深圳', 114.05, 22.55)
             ->setTIMFaceElem(1, 'haha')
             ->beforeCallback(false)
@@ -44,14 +44,14 @@ class OpenimTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->openim->setTIMTextElem('haha')->batchSendMsg(['105', '106']);
+        $result = $tim->message->setTIMTextElem('haha')->batchSendMsg(['105', '106']);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->openim->setTIMTextElem('haha')
+        $result = $tim->message->setTIMTextElem('haha')
             ->setTIMLocationElem('深圳', 114.05, 22.55)->batchSendMsg(['105', 106]);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->openim->setTIMTextElem('haha')
+        $result = $tim->message->setTIMTextElem('haha')
             ->setTIMLocationElem('深圳', 114.05, 22.55)
             ->setTIMFaceElem(1, 'haha')
             ->noUnread(true)
@@ -69,14 +69,14 @@ class OpenimTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->openim->setTIMTextElem('haha')->importMsg('105', 106);
+        $result = $tim->message->setTIMTextElem('haha')->importMsg('105', 106);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->openim->setTIMTextElem('haha')
+        $result = $tim->message->setTIMTextElem('haha')
             ->setTIMLocationElem('深圳', 114.05, 22.55)->importMsg(106, 105);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->openim->setTIMTextElem('haha')
+        $result = $tim->message->setTIMTextElem('haha')
             ->setTIMLocationElem('深圳', 114.05, 22.55)
             ->setTIMFaceElem(1, 'haha')
             ->beforeCallback(false)
@@ -96,7 +96,7 @@ class OpenimTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->openim->getRoamMsg('105', 106, 100, time() - 86400, time());
+        $result = $tim->message->getRoamMsg('105', 106, 100, time() - 86400, time());
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -108,10 +108,10 @@ class OpenimTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->openim->getRoamMsg(106, '105', 100, time() - 86400, time());
+        $result = $tim->message->getRoamMsg(106, '105', 100, time() - 86400, time());
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->openim->msgWithdraw('105', 106, $result['LastMsgKey']);
+        $result = $tim->message->msgWithdraw('105', 106, $result['LastMsgKey']);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -123,7 +123,7 @@ class OpenimTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->openim->setMsgRead('105', 106);
+        $result = $tim->message->setMsgRead('105', 106);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -135,7 +135,7 @@ class OpenimTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->openim->getUnreadMsgNum('105', 106);
+        $result = $tim->message->getUnreadMsgNum('105', 106);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -147,10 +147,10 @@ class OpenimTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->openim->getRoamMsg(106, '105', 100, time() - 86400, time());
+        $result = $tim->message->getRoamMsg(106, '105', 100, time() - 86400, time());
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->openim->setCloudCustomData('haha')->modifyMsg('105', 106, $result['LastMsgKey']);
+        $result = $tim->message->setCloudCustomData('haha')->modifyMsg('105', 106, $result['LastMsgKey']);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 }

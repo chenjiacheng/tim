@@ -7,13 +7,13 @@ namespace Chenjiacheng\Tim;
 use Chenjiacheng\Tim\Provider\AccountServiceProvider;
 use Chenjiacheng\Tim\Provider\ConfigServiceProvider;
 use Chenjiacheng\Tim\Provider\ConversationServiceProvider;
-use Chenjiacheng\Tim\Provider\OpenimServiceProvider;
+use Chenjiacheng\Tim\Provider\MessageServiceProvider;
 use Chenjiacheng\Tim\Provider\OperateServiceProvider;
 use Chenjiacheng\Tim\Provider\ProfileServiceProvider;
 use Chenjiacheng\Tim\Provider\PushServiceProvider;
 use Chenjiacheng\Tim\Service\Account;
 use Chenjiacheng\Tim\Service\Conversation;
-use Chenjiacheng\Tim\Service\Openim;
+use Chenjiacheng\Tim\Service\Message;
 use Chenjiacheng\Tim\Service\Operate;
 use Chenjiacheng\Tim\Service\Profile;
 use Chenjiacheng\Tim\Service\Push;
@@ -23,7 +23,7 @@ use Pimple\Container;
  * @property array $config
  * @property Account $account
  * @property Conversation $conversation
- * @property Openim $openim
+ * @property Message $message
  * @property Operate $operate
  * @property Profile $profile
  * @property Push $push
@@ -38,7 +38,7 @@ class Tim extends Container
     protected array $providers = [
         AccountServiceProvider::class,
         ConversationServiceProvider::class,
-        OpenimServiceProvider::class,
+        MessageServiceProvider::class,
         OperateServiceProvider::class,
         ProfileServiceProvider::class,
         PushServiceProvider::class,

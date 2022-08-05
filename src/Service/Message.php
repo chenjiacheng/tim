@@ -9,7 +9,7 @@ use Chenjiacheng\Tim\Support\Arr;
 use Chenjiacheng\Tim\Support\Collection;
 use GuzzleHttp\Exception\GuzzleException;
 
-class Openim extends AbstractService
+class Message extends AbstractService
 {
     use TIMMsgTrait;
 
