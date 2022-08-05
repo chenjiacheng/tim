@@ -31,7 +31,7 @@ abstract class AbstractService
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    protected function httpPostJson(string $uri, array $data): Collection
+    protected function httpPostJson(string $uri, array $data = []): Collection
     {
         $uri .= '?';
         $uri .= http_build_query([
