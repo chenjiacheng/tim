@@ -13,22 +13,35 @@ class ConversationTest extends TimTest
      * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function testSetPortrait()
+    public function testGetList()
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->profile->setPortrait('105', [
-            'Tag_Profile_IM_Nick'     => 'test105',
-            'Tag_Profile_IM_Gender'   => 'Gender_Type_Male',
-            'Tag_Profile_IM_BirthDay' => 20220801,
-        ]);
+        $result = $tim->conversation->getList('105');
         $this->assertSame('OK', $result['ActionStatus']);
+    }
 
-        $result = $tim->profile->setPortrait(106, [
-            'Tag_Profile_IM_Nick'     => 'test106',
-            'Tag_Profile_IM_Gender'   => 'Gender_Type_Male',
-            'Tag_Profile_IM_BirthDay' => 20220801,
-        ]);
+    /**
+     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testDeleteC2C()
+    {
+        $tim = new Tim($this->config);
+
+        $result = $tim->conversation->deleteC2C('105', '106');
+        $this->assertSame('OK', $result['ActionStatus']);
+    }
+
+    /**
+     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testDeleteG2C()
+    {
+        $tim = new Tim($this->config);
+
+        $result = $tim->conversation->deleteG2C('105', '@#123456');
         $this->assertSame('OK', $result['ActionStatus']);
     }
 }
