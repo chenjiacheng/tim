@@ -12,6 +12,7 @@ use Chenjiacheng\Tim\Service\Group\GroupMember;
 use Chenjiacheng\Tim\Service\Group\ResponseFilter;
 use Chenjiacheng\Tim\Support\Arr;
 use Chenjiacheng\Tim\Support\Collection;
+use Chenjiacheng\Tim\Traits\TIMMsgTrait;
 use GuzzleHttp\Exception\GuzzleException;
 use JetBrains\PhpStorm\Pure;
 

@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Chenjiacheng\Tim\Service;
+namespace Chenjiacheng\Tim\Traits;
 
-use Chenjiacheng\Tim\Service\TIMMsgElement\TIMCustomElem;
-use Chenjiacheng\Tim\Service\TIMMsgElement\TIMFaceElem;
-use Chenjiacheng\Tim\Service\TIMMsgElement\TIMFileElem;
-use Chenjiacheng\Tim\Service\TIMMsgElement\TIMImageElem;
-use Chenjiacheng\Tim\Service\TIMMsgElement\TIMLocationElem;
-use Chenjiacheng\Tim\Service\TIMMsgElement\TIMSoundElem;
-use Chenjiacheng\Tim\Service\TIMMsgElement\TIMTextElem;
-use Chenjiacheng\Tim\Service\TIMMsgElement\TIMVideoFileElem;
+use Chenjiacheng\Tim\Traits\TIMMsgElement\TIMCustomElem;
+use Chenjiacheng\Tim\Traits\TIMMsgElement\TIMFaceElem;
+use Chenjiacheng\Tim\Traits\TIMMsgElement\TIMFileElem;
+use Chenjiacheng\Tim\Traits\TIMMsgElement\TIMImageElem;
+use Chenjiacheng\Tim\Traits\TIMMsgElement\TIMLocationElem;
+use Chenjiacheng\Tim\Traits\TIMMsgElement\TIMSoundElem;
+use Chenjiacheng\Tim\Traits\TIMMsgElement\TIMTextElem;
+use Chenjiacheng\Tim\Traits\TIMMsgElement\TIMVideoFileElem;
 
 trait TIMMsgTrait
 {

@@ -7,6 +7,7 @@ namespace Chenjiacheng\Tim\Service;
 use Chenjiacheng\Tim\Exception\InvalidConfigException;
 use Chenjiacheng\Tim\Support\Arr;
 use Chenjiacheng\Tim\Support\Collection;
+use Chenjiacheng\Tim\Traits\TIMMsgTrait;
 use GuzzleHttp\Exception\GuzzleException;
 
 class Message extends AbstractService

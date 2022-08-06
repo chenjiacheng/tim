@@ -7,6 +7,7 @@ namespace Chenjiacheng\Tim\Service;
 use Chenjiacheng\Tim\Exception\InvalidConfigException;
 use Chenjiacheng\Tim\Support\Arr;
 use Chenjiacheng\Tim\Support\Collection;
+use Chenjiacheng\Tim\Traits\TIMMsgTrait;
 use GuzzleHttp\Exception\GuzzleException;
 
 class Push extends AbstractService
@@ -97,7 +98,7 @@ class Push extends AbstractService
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function getAttr(array|string|int $toAccount): Collection
+    public function getUserAttr(array|string|int $toAccount): Collection
     {
         return $this->httpPostJson(
             'v4/all_member_push/im_get_attr',
@@ -118,7 +119,7 @@ class Push extends AbstractService
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function setAttr(array $userAttrs): Collection
+    public function setUserAttr(array $userAttrs): Collection
     {
         return $this->httpPostJson(
             'v4/all_member_push/im_set_attr',
@@ -139,7 +140,7 @@ class Push extends AbstractService
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function removeAttr(array $userAttrs): Collection
+    public function removeUserAttr(array $userAttrs): Collection
     {
         return $this->httpPostJson(
             'v4/all_member_push/im_remove_attr',
@@ -160,7 +161,7 @@ class Push extends AbstractService
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function getTag(array|string|int $toAccount): Collection
+    public function getUserTag(array|string|int $toAccount): Collection
     {
         return $this->httpPostJson(
             'v4/all_member_push/im_get_tag',
@@ -181,7 +182,7 @@ class Push extends AbstractService
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function setTag(array $userTags): Collection
+    public function setUserTag(array $userTags): Collection
     {
         return $this->httpPostJson(
             'v4/all_member_push/im_add_tag',
@@ -202,7 +203,7 @@ class Push extends AbstractService
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function removeTag(array $userTags): Collection
+    public function removeUserTag(array $userTags): Collection
     {
         return $this->httpPostJson(
             'v4/all_member_push/im_remove_tag',
@@ -223,7 +224,7 @@ class Push extends AbstractService
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function removeAllTags(array|string|int $toAccount): Collection
+    public function removeUserAllTags(array|string|int $toAccount): Collection
     {
         return $this->httpPostJson(
             'v4/all_member_push/im_remove_all_tags',
