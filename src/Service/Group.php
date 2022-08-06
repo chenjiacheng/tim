@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Chenjiacheng\Tim\Service;
 
-use Chenjiacheng\Tim\Constant\GroupApplyJoinOption;
 use Chenjiacheng\Tim\Constant\GroupType;
 use Chenjiacheng\Tim\Exception\InvalidConfigException;
+use Chenjiacheng\Tim\Service\Group\GroupAttr;
 use Chenjiacheng\Tim\Service\Group\GroupInfo;
+use Chenjiacheng\Tim\Service\Group\GroupMember;
 use Chenjiacheng\Tim\Service\Group\ResponseFilter;
 use Chenjiacheng\Tim\Support\Arr;
 use Chenjiacheng\Tim\Support\Collection;
 use GuzzleHttp\Exception\GuzzleException;
+use JetBrains\PhpStorm\Pure;
 
 class Group extends AbstractService
 {
@@ -27,8 +29,8 @@ class Group extends AbstractService
      * @param string $groupType 群组类型
      * @return Collection
      *
-     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function getAll(int $limit = 10000, int $next = 0, string $groupType = ''): Collection
     {
@@ -54,10 +56,10 @@ class Group extends AbstractService
      * @param array $memberList 初始群成员列表，最多100个；成员信息字段详情请参阅 群成员资料
      * @param GroupInfo|null $groupInfo 群资料
      *
-     * @return \Chenjiacheng\Tim\Support\Collection
+     * @return Collection
      *
-     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function create(string $name, string $type = GroupType::PUBLIC, string $ownerAccount = '',
                            string $groupId = '', array $memberList = [], ?GroupInfo $groupInfo = null): Collection
@@ -81,10 +83,10 @@ class Group extends AbstractService
      *
      * @param array|string $groupIdList 需要拉取的群组列表
      * @param ResponseFilter|null $responseFilter 过滤器
-     * @return \Chenjiacheng\Tim\Support\Collection
+     * @return Collection
      *
-     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function get(array|string $groupIdList, ?ResponseFilter $responseFilter = null): Collection
     {
@@ -107,10 +109,10 @@ class Group extends AbstractService
      * @param string $muteAllMember 设置全员禁言："On"开启，"Off"关闭
      * @param GroupInfo|null $groupInfo 群资料
      *
-     * @return \Chenjiacheng\Tim\Support\Collection
+     * @return Collection
      *
-     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function modify(string $groupId, string $name = '', string $muteAllMember = '', ?GroupInfo $groupInfo = null): Collection
     {
@@ -131,10 +133,10 @@ class Group extends AbstractService
      *
      * @param string $groupId 操作的群 ID
      *
-     * @return \Chenjiacheng\Tim\Support\Collection
+     * @return Collection
      *
-     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function destroy(string $groupId): Collection
     {
@@ -158,10 +160,10 @@ class Group extends AbstractService
      * @param int $withNoActiveGroups 是否获取用户已加入但未激活的 Private（即新版本中 Work，好友工作群) 群信息，0表示不获取，1表示获取。默认为0
      * @param array $responseFilter
      *
-     * @return \Chenjiacheng\Tim\Support\Collection
+     * @return Collection
      *
-     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function getJoinedGroupList(array|string|int $memberAccount, int $limit = 0, int $offset = 0,
                                        string $groupType = '', int $withHugeGroups = 0, int $withNoActiveGroups = 0,
@@ -188,10 +190,10 @@ class Group extends AbstractService
      *
      * @param string $groupId
      *
-     * @return \Chenjiacheng\Tim\Support\Collection
+     * @return Collection
      *
-     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function sendMsg(string $groupId): Collection
     {
@@ -214,10 +216,10 @@ class Group extends AbstractService
      * @param string $content 系统通知的内容
      * @param array|string|int $toMembersAccount 接收者群成员列表，请填写接收者 UserID，最多填写500个，不填或为空表示全员下发
      *
-     * @return \Chenjiacheng\Tim\Support\Collection
+     * @return Collection
      *
-     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function sendSystemNotification(string $groupId, string $content, array|string|int $toMembersAccount = []): Collection
     {
@@ -239,10 +241,10 @@ class Group extends AbstractService
      * @param string $groupId 要被转移的群组 ID
      * @param string|int $newOwnerAccount 新群主 ID
      *
-     * @return \Chenjiacheng\Tim\Support\Collection
+     * @return Collection
      *
-     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function changeOwner(string $groupId, string|int $newOwnerAccount): Collection
     {
@@ -262,10 +264,10 @@ class Group extends AbstractService
      * @param string $groupId 操作的群 ID
      * @param array $msgSeqList 被撤回的消息 seq 列表，一次请求最多可以撤回10条消息 seq
      *
-     * @return \Chenjiacheng\Tim\Support\Collection
+     * @return Collection
      *
-     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function groupMsgRecall(string $groupId, array $msgSeqList): Collection
     {
@@ -289,10 +291,10 @@ class Group extends AbstractService
      * @param int $createTime 群组的创建时间
      * @param GroupInfo|null $groupInfo 群资料
      *
-     * @return \Chenjiacheng\Tim\Support\Collection
+     * @return Collection
      *
-     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function import(string $name, string $type = GroupType::PUBLIC, string $ownerAccount = '',
                            string $groupId = '', int $createTime = 0, ?GroupInfo $groupInfo = null): Collection
@@ -318,10 +320,10 @@ class Group extends AbstractService
      * @param array $msgList 导入的消息列表
      * @param int $recentContactFlag 会话更新识别，为1的时候标识触发会话更新，默认不触发（avchatroom 群不支持）
      *
-     * @return \Chenjiacheng\Tim\Support\Collection
+     * @return Collection
      *
-     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function importMsg(string $groupId, array $msgList, int $recentContactFlag = 0): Collection
     {
@@ -344,10 +346,10 @@ class Group extends AbstractService
      * @param int $reqMsgSeq 拉取消息的最大 seq
      * @param int $withRecalledMsg 是否带撤回的消息，填1表明需要拉取撤回后的消息；默认不拉取撤回后的消息
      *
-     * @return \Chenjiacheng\Tim\Support\Collection
+     * @return Collection
      *
-     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function groupMsgGetSimple(string $groupId, int $reqMsgNumber, int $reqMsgSeq = 0, int $withRecalledMsg = 0): Collection
     {
@@ -369,10 +371,10 @@ class Group extends AbstractService
      *
      * @param string $groupId
      *
-     * @return \Chenjiacheng\Tim\Support\Collection
+     * @return Collection
      *
-     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function getOnlineMemberNum(string $groupId): Collection
     {
@@ -390,10 +392,10 @@ class Group extends AbstractService
      *
      * @param string $groupId
      * @param int $msgSeq
-     * @return \Chenjiacheng\Tim\Support\Collection
+     * @return Collection
      *
-     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function modifyMsg(string $groupId, int $msgSeq): Collection
     {
@@ -419,10 +421,10 @@ class Group extends AbstractService
      * @param int $count 上一次拉取到的成员位置，第一次填写""
      * @param int $msgSeq 拉取消息的 seq
      *
-     * @return \Chenjiacheng\Tim\Support\Collection
+     * @return Collection
      *
-     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function getGroupMsgReceiptDetail(string $groupId, int $filter, string $cursor, int $count, int $msgSeq): Collection
     {
@@ -446,10 +448,10 @@ class Group extends AbstractService
      * @param string $groupId 要拉取已读回执详情的群组 ID
      * @param array $msgSeqList 拉取消息的 seq 列表
      *
-     * @return \Chenjiacheng\Tim\Support\Collection
+     * @return Collection
      *
-     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function getGroupMsgReceipt(string $groupId, array $msgSeqList): Collection
     {
@@ -468,10 +470,10 @@ class Group extends AbstractService
      *
      * @param string|int $fromAccount 消息来源帐号
      *
-     * @return \Chenjiacheng\Tim\Support\Collection
+     * @return Collection
      *
-     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function sendBroadcastMsg(string|int $fromAccount = ''): Collection
     {
@@ -484,5 +486,25 @@ class Group extends AbstractService
             ], array_filter([
                 'From_Account' => (string)$fromAccount,
             ])));
+    }
+
+    /**
+     * @param string $groupId
+     *
+     * @return GroupAttr
+     */
+    #[Pure] public function groupAttr(string $groupId): GroupAttr
+    {
+        return new GroupAttr($this->app, $groupId);
+    }
+
+    /**
+     * @param string $groupId
+     *
+     * @return GroupMember
+     */
+    #[Pure] public function groupMember(string $groupId): GroupMember
+    {
+        return new GroupMember($this->app, $groupId);
     }
 }
