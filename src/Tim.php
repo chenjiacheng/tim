@@ -7,6 +7,7 @@ namespace Chenjiacheng\Tim;
 use Chenjiacheng\Tim\Provider\AccountServiceProvider;
 use Chenjiacheng\Tim\Provider\ConfigServiceProvider;
 use Chenjiacheng\Tim\Provider\ContactServiceProvider;
+use Chenjiacheng\Tim\Provider\GroupServiceProvider;
 use Chenjiacheng\Tim\Provider\MessageServiceProvider;
 use Chenjiacheng\Tim\Provider\OperateServiceProvider;
 use Chenjiacheng\Tim\Provider\ProfileServiceProvider;
@@ -14,6 +15,7 @@ use Chenjiacheng\Tim\Provider\PushServiceProvider;
 use Chenjiacheng\Tim\Provider\SmsServiceProvider;
 use Chenjiacheng\Tim\Service\Account;
 use Chenjiacheng\Tim\Service\Contact;
+use Chenjiacheng\Tim\Service\Group;
 use Chenjiacheng\Tim\Service\Message;
 use Chenjiacheng\Tim\Service\Operate;
 use Chenjiacheng\Tim\Service\Profile;
@@ -25,6 +27,7 @@ use Pimple\Container;
  * @property array $config
  * @property Account $account
  * @property Contact $contact
+ * @property Group $group
  * @property Message $message
  * @property Operate $operate
  * @property Profile $profile
@@ -41,6 +44,7 @@ class Tim extends Container
     protected array $providers = [
         AccountServiceProvider::class,
         ContactServiceProvider::class,
+        GroupServiceProvider::class,
         MessageServiceProvider::class,
         OperateServiceProvider::class,
         ProfileServiceProvider::class,
