@@ -15,7 +15,7 @@ class ChatType
     const C2C = 'C2C';
 
     /**
-     * 表示群组消息
+     * 群组消息
      */
     const GROUP = 'Group';
 }
