@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chenjiacheng\Tim\Service;
 
+use Chenjiacheng\Tim\Constant\ChatType;
 use Chenjiacheng\Tim\Exception\InvalidConfigException;
 use Chenjiacheng\Tim\Support\Collection;
 use GuzzleHttp\Exception\GuzzleException;
@@ -35,21 +36,21 @@ class Operate extends AbstractService
      *
      * @see https://cloud.tencent.com/document/product/269/1650
      *
-     * @param string $chatType
-     * @param string $msgTime
+     * @param string $msgTime 需要下载的消息记录的时间段
+     * @param string $chatType 消息类型，单发消息=ChatType::C2C，表示群组消息=ChatType::Group
      *
      * @return Collection
      *
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function getHistory(string $msgTime, bool $isGroup = false): Collection
+    public function getHistory(string $msgTime, string $chatType = ChatType::C2C): Collection
     {
         return $this->httpPostJson(
             'v4/open_msg_svc/get_history',
             [
-                'ChatType' => $isGroup ? 'Group' : 'C2C',
                 'MsgTime'  => $msgTime,
+                'ChatType' => $chatType,
             ]);
     }
 
@@ -73,7 +74,7 @@ class Operate extends AbstractService
      *
      * @see https://cloud.tencent.com/document/product/269/74775
      *
-     * @param string $rawURL
+     * @param string $rawURL 文件 URL，可从 IM 富媒体消息的 URL 字段获取
      *
      * @return Collection
      *
@@ -94,7 +95,7 @@ class Operate extends AbstractService
      *
      * @see https://cloud.tencent.com/document/product/269/74776
      *
-     * @param string $rawURL
+     * @param string $rawURL 文件 URL，可从 IM 富媒体消息的 URL 字段获取
      *
      * @return Collection
      *
@@ -115,7 +116,7 @@ class Operate extends AbstractService
      *
      * @see https://cloud.tencent.com/document/product/269/74777
      *
-     * @param array $rawURLs
+     * @param array $rawURLs 批量查询的文件 URL，可从 IM 富媒体消息的 URL 字段获取
      *
      * @return Collection
      *
@@ -128,51 +129,6 @@ class Operate extends AbstractService
             'v4/im_cos_msg/get_cos_sig',
             [
                 'RawURLs' => $rawURLs,
-            ]);
-    }
-
-    /**
-     * 设置全局禁言
-     *
-     * @see https://cloud.tencent.com/document/product/269/4230
-     *
-     * @param string|int $setAccount
-     * @param string $msgTime
-     * @param bool $isGroup
-     *
-     * @return Collection
-     *
-     * @throws InvalidConfigException
-     * @throws GuzzleException
-     */
-    public function setNoSpeaking(string|int $setAccount, string $msgTime, bool $isGroup = false): Collection
-    {
-        return $this->httpPostJson(
-            'v4/openconfigsvr/setnospeaking',
-            [
-                'Set_Account'                                                => (string)$setAccount,
-                $isGroup ? 'GroupmsgNospeakingTime' : 'C2CmsgNospeakingTime' => $msgTime,
-            ]);
-    }
-
-    /**
-     * 查询全局禁言
-     *
-     * @see https://cloud.tencent.com/document/product/269/4229
-     *
-     * @param string|int $getAccount
-     *
-     * @return Collection
-     *
-     * @throws InvalidConfigException
-     * @throws GuzzleException
-     */
-    public function getNoSpeaking(string|int $getAccount): Collection
-    {
-        return $this->httpPostJson(
-            'v4/openconfigsvr/getnospeaking',
-            [
-                'Get_Account' => (string)$getAccount,
             ]);
     }
 }
