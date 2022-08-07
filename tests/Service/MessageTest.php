@@ -17,22 +17,20 @@ class MessageTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->message->setTIMTextElem('haha')->sendMsg('105');
+        $result = $tim->message->setTIMTextElem('你好')->sendMsg('101');
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->message->setTIMTextElem('haha')
-            ->setTIMLocationElem('深圳', 114.05, 22.55)->sendMsg(106);
-        $this->assertSame('OK', $result['ActionStatus']);
-
-        $result = $tim->message->setTIMTextElem('haha')
+        $result = $tim->message
+            ->setTIMTextElem('在吗')
             ->setTIMLocationElem('深圳', 114.05, 22.55)
-            ->setTIMFaceElem(1, 'haha')
+            ->setCloudCustomData('云端保存消息')
             ->beforeCallback(false)
             ->afterCallback(false)
             ->noUnread(true)
             ->noLastMsg(true)
             ->withMuteNotifications(true)
-            ->sendMsg(106, '105', 2, time() - 86400);
+            ->setOfflinePushInfo([])
+            ->sendMsg(101, '102', false, 86400);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -44,20 +42,18 @@ class MessageTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->message->setTIMTextElem('haha')->batchSendMsg(['105', '106']);
+        $result = $tim->message->setTIMTextElem('你好')->batchSendMsg(['101', '102']);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->message->setTIMTextElem('haha')
-            ->setTIMLocationElem('深圳', 114.05, 22.55)->batchSendMsg(['105', 106]);
-        $this->assertSame('OK', $result['ActionStatus']);
-
-        $result = $tim->message->setTIMTextElem('haha')
+        $result = $tim->message
+            ->setTIMTextElem('在吗')
             ->setTIMLocationElem('深圳', 114.05, 22.55)
-            ->setTIMFaceElem(1, 'haha')
+            ->setCloudCustomData('云端保存消息')
             ->noUnread(true)
             ->noLastMsg(true)
             ->withMuteNotifications(true)
-            ->batchSendMsg([106], '105', 2, time() - 86400);
+            ->setOfflinePushInfo([])
+            ->batchSendMsg(['101', 102], '102', false, 86400);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -69,22 +65,18 @@ class MessageTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->message->setTIMTextElem('haha')->importMsg('105', 106);
+        $result = $tim->message->setTIMTextElem('你好')->importMsg('101', '102');
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->message->setTIMTextElem('haha')
-            ->setTIMLocationElem('深圳', 114.05, 22.55)->importMsg(106, 105);
-        $this->assertSame('OK', $result['ActionStatus']);
-
-        $result = $tim->message->setTIMTextElem('haha')
+        $result = $tim->message
+            ->setTIMTextElem('在吗')
             ->setTIMLocationElem('深圳', 114.05, 22.55)
-            ->setTIMFaceElem(1, 'haha')
-            ->beforeCallback(false)
-            ->afterCallback(false)
+            ->setCloudCustomData('云端保存消息')
             ->noUnread(true)
             ->noLastMsg(true)
             ->withMuteNotifications(true)
-            ->importMsg(106, '105', time() - 86400, 2);
+            ->setOfflinePushInfo([])
+            ->importMsg('101', 102, time(), false);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -96,7 +88,7 @@ class MessageTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->message->getRoamMsg('105', 106, 100, time() - 86400, time());
+        $result = $tim->message->getRoamMsg('101', 102, 100, time() - 86400, time());
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -108,10 +100,10 @@ class MessageTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->message->getRoamMsg(106, '105', 100, time() - 86400, time());
+        $result = $tim->message->getRoamMsg('101', 102, 100, time() - 86400, time());
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->message->msgWithdraw('105', 106, $result['LastMsgKey']);
+        $result = $tim->message->msgWithdraw('101', 102, $result['LastMsgKey']);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -123,7 +115,7 @@ class MessageTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->message->setMsgRead('105', 106);
+        $result = $tim->message->setMsgRead('101', 102);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -135,7 +127,10 @@ class MessageTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->message->getUnreadMsgNum('105', 106);
+        $result = $tim->message->getUnreadMsgNum('101', [102, '103']);
+        $this->assertSame('OK', $result['ActionStatus']);
+
+        $result = $tim->message->getUnreadMsgNum('101', 102);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -147,10 +142,13 @@ class MessageTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->message->getRoamMsg(106, '105', 100, time() - 86400, time());
+        $result = $tim->message->getRoamMsg(101, '102', 100, time() - 86400, time());
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->message->setCloudCustomData('haha')->modifyMsg('105', 106, $result['LastMsgKey']);
+        $result = $tim->message
+            ->setTIMTextElem('哈哈')
+            ->setCloudCustomData('云端保存消息')
+            ->modifyMsg('101', 102, $result['LastMsgKey']);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 }

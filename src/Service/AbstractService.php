@@ -35,7 +35,7 @@ abstract class AbstractService
             'sdkappid'    => $this->app->config['sdkappid'],
             'identifier'  => $this->app->config['identifier'],
             'usersig'     => $this->genUserSig($this->app->config['identifier']),
-            'random'      => mt_rand(0, 4294967295),
+            'random'      => $this->getRandom(),
             'contenttype' => 'json',
         ]);
 
@@ -110,6 +110,6 @@ abstract class AbstractService
      */
     public function getRandom(): int
     {
-        return rand(100000000, 999999999);
+        return rand(0, 4294967295);
     }
 }
