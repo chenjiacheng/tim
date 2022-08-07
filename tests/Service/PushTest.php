@@ -13,11 +13,11 @@ class PushTest extends TimTest
      * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function testAllMember()
+    public function testPushAllMember()
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->push->setTIMTextElem('haha')->allMember();
+        $result = $tim->push->setTIMTextElem('大家好吗')->pushAllMember();
         $this->assertSame('OK', $result['ActionStatus']);
     }
 }

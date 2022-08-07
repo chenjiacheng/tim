@@ -14,14 +14,19 @@ class Push extends AbstractService
 {
     use TIMMsgTrait;
 
-    protected array $condition;
+    /**
+     * 推送条件
+     *
+     * @var array
+     */
+    protected array $condition = [];
 
     /**
      * 离线推送信息配置
      *
      * @var array
      */
-    protected array $offlinePushInfo;
+    protected array $offlinePushInfo = [];
 
     /**
      * 全员推送
@@ -29,25 +34,26 @@ class Push extends AbstractService
      * @see https://cloud.tencent.com/document/product/269/45934
      *
      * @param string|int|null $fromAccount 消息推送方帐号
-     * @param int|null $msgLifeTime 消息离线存储时间，单位秒，最多保存7天（604800秒）。默认为0，表示不离线存储，即只推在线用户
+     * @param int $msgLifeTime 消息离线存储时间，单位秒，最多保存7天（604800秒）。默认为0，表示不离线存储，即只推在线用户
      *
      * @return Collection
      *
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function allMember(string|int $fromAccount = null, int $msgLifeTime = null): Collection
+    public function pushAllMember(string|int $fromAccount = null, int $msgLifeTime = 0): Collection
     {
-        $data = [
-            'MsgRandom' => $this->getRandom(),
-        ];
-
-        isset($fromAccount) && $data['From_Account'] = (string)$fromAccount;
-        isset($msgLifeTime) && $data['MsgLifeTime'] = $msgLifeTime;
-        isset($this->condition) && $data['Condition'] = $this->condition;
-        isset($this->offlinePushInfo) && $data['OfflinePushInfo'] = $this->offlinePushInfo;
-
-        return $this->httpPostJson('v4/all_member_push/im_push', $data);
+        return $this->httpPostJson(
+            'v4/all_member_push/im_push',
+            array_merge([
+                'MsgRandom' => $this->getRandom(),
+                'MsgBody'   => $this->msgBody,
+            ], array_filter([
+                'From_Account'    => (string)$fromAccount,
+                'MsgLifeTime'     => $msgLifeTime,
+                'Condition'       => $this->condition,
+                'OfflinePushInfo' => $this->offlinePushInfo,
+            ])));
     }
 
     /**
