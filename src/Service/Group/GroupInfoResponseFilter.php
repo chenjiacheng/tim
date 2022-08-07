@@ -4,42 +4,21 @@ declare(strict_types=1);
 
 namespace Chenjiacheng\Tim\Service\Group;
 
-class ResponseFilter
+class GroupInfoResponseFilter
 {
     /**
-     * @var array
-     */
-    public array $groupBaseInfoFilter;
-
-    /**
-     * @var array
-     */
-    public array $memberInfoFilter;
-
-    /**
-     * @var array
-     */
-    public array $appDefinedDataFilterGroup;
-
-    /**
-     * @var array
-     */
-    public array $appDefinedDataFilterGroupMember;
-
-    /**
      * GroupInfoResponseFilter constructor.
+     *
      * @param array $groupBaseInfoFilter 基础信息字段过滤器，指定需要获取的基础信息字段
      * @param array $memberInfoFilter 成员信息字段过滤器，指定需要获取的成员信息字段
      * @param array $appDefinedDataFilterGroup 该字段用来群组维度的自定义字段过滤器，指定需要获取的群组维度的自定义字段
      * @param array $appDefinedDataFilterGroupMember 该字段用来群成员维度的自定义字段过滤器，指定需要获取的群成员维度的自定义字段
      */
-    public function __construct(array $groupBaseInfoFilter = [], array $memberInfoFilter = [],
-                                array $appDefinedDataFilterGroup = [], array $appDefinedDataFilterGroupMember = [])
+    public function __construct(public array $groupBaseInfoFilter = [],
+                                public array $memberInfoFilter = [],
+                                public array $appDefinedDataFilterGroup = [],
+                                public array $appDefinedDataFilterGroupMember = [])
     {
-        $this->groupBaseInfoFilter = $groupBaseInfoFilter;
-        $this->memberInfoFilter = $memberInfoFilter;
-        $this->appDefinedDataFilterGroup = $appDefinedDataFilterGroup;
-        $this->appDefinedDataFilterGroupMember = $appDefinedDataFilterGroupMember;
     }
 
     /**
@@ -68,7 +47,7 @@ class ResponseFilter
      *
      * @return $this
      */
-    public function setGroupBaseInfoFilter(array $groupBaseInfoFilter): ResponseFilter
+    public function setGroupBaseInfoFilter(array $groupBaseInfoFilter): GroupInfoResponseFilter
     {
         $this->groupBaseInfoFilter = $groupBaseInfoFilter;
         return $this;
@@ -87,7 +66,7 @@ class ResponseFilter
      *
      * @return $this
      */
-    public function setMemberInfoFilter(array $memberInfoFilter): ResponseFilter
+    public function setMemberInfoFilter(array $memberInfoFilter): GroupInfoResponseFilter
     {
         $this->memberInfoFilter = $memberInfoFilter;
         return $this;
@@ -106,7 +85,7 @@ class ResponseFilter
      *
      * @return $this
      */
-    public function setAppDefinedDataFilterGroup(array $appDefinedDataFilterGroup): ResponseFilter
+    public function setAppDefinedDataFilterGroup(array $appDefinedDataFilterGroup): GroupInfoResponseFilter
     {
         $this->appDefinedDataFilterGroup = $appDefinedDataFilterGroup;
         return $this;
@@ -125,7 +104,7 @@ class ResponseFilter
      *
      * @return $this
      */
-    public function setAppDefinedDataFilterGroupMember(array $appDefinedDataFilterGroupMember): ResponseFilter
+    public function setAppDefinedDataFilterGroupMember(array $appDefinedDataFilterGroupMember): GroupInfoResponseFilter
     {
         $this->appDefinedDataFilterGroupMember = $appDefinedDataFilterGroupMember;
         return $this;

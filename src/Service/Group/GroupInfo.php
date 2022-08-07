@@ -9,37 +9,8 @@ use Chenjiacheng\Tim\Constant\GroupApplyJoinOption;
 class GroupInfo
 {
     /**
-     * @var string
-     */
-    public string $faceUrl;
-
-    /**
-     * @var string
-     */
-    public string $introduction;
-
-    /**
-     * @var string
-     */
-    public string $notification;
-
-    /**
-     * @var int
-     */
-    public int $maxMemberNum;
-
-    /**
-     * @var string
-     */
-    public string $applyJoinOption;
-
-    /**
-     * @var array
-     */
-    public array $appDefinedData;
-
-    /**
      * GroupInfo constructor.
+     *
      * @param string $introduction 群简介，最长240字节
      * @param string $notification 群公告，最长300字节
      * @param string $faceUrl 群头像 URL，最长100字节
@@ -47,17 +18,13 @@ class GroupInfo
      * @param string $applyJoinOption 申请加群处理方式
      * @param array $appDefinedData 群组维度的自定义字段
      */
-    public function __construct(string $introduction = '', string $notification = '',
-                                string $faceUrl = '', int $maxMemberNum = 0,
-                                string $applyJoinOption = GroupApplyJoinOption::NEED_PERMISSION,
-                                array $appDefinedData = [])
+    public function __construct(public string $introduction = '',
+                                public string $notification = '',
+                                public string $faceUrl = '',
+                                public int $maxMemberNum = 0,
+                                public string $applyJoinOption = '',
+                                public array $appDefinedData = [])
     {
-        $this->faceUrl = $faceUrl;
-        $this->introduction = $introduction;
-        $this->notification = $notification;
-        $this->maxMemberNum = $maxMemberNum;
-        $this->applyJoinOption = $applyJoinOption;
-        $this->appDefinedData = $appDefinedData;
     }
 
     /**
@@ -66,10 +33,12 @@ class GroupInfo
     public function output(): array
     {
         return [
-            'Introduction' => $this->introduction,
-            'Notification' => $this->notification,
-            'FaceUrl'      => $this->faceUrl,
-            'MaxMemberNum' => $this->maxMemberNum,
+            'Introduction'    => $this->introduction,
+            'Notification'    => $this->notification,
+            'FaceUrl'         => $this->faceUrl,
+            'MaxMemberNum'    => $this->maxMemberNum,
+            'ApplyJoinOption' => $this->applyJoinOption,
+            'AppDefinedData'  => $this->appDefinedData,
         ];
     }
 
@@ -162,7 +131,7 @@ class GroupInfo
      *
      * @return GroupInfo
      */
-    public function setApplyJoinOption(string $applyJoinOption = GroupApplyJoinOption::NEED_PERMISSION): GroupInfo
+    public function setApplyJoinOption(string $applyJoinOption = ''): GroupInfo
     {
         $this->applyJoinOption = $applyJoinOption;
         return $this;
