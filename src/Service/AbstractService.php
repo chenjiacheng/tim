@@ -12,14 +12,11 @@ use GuzzleHttp\Exception\GuzzleException;
 
 abstract class AbstractService
 {
-    protected Tim $app;
-
     /**
      * @param Tim $app
      */
-    public function __construct(Tim $app)
+    public function __construct(protected Tim $app)
     {
-        $this->app = $app;
     }
 
     /**
