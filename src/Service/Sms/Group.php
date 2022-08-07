@@ -10,25 +10,18 @@ use Chenjiacheng\Tim\Support\Arr;
 use Chenjiacheng\Tim\Support\Collection;
 use Chenjiacheng\Tim\Tim;
 use GuzzleHttp\Exception\GuzzleException;
-use JetBrains\PhpStorm\Pure;
 
 class Group extends AbstractService
 {
     /**
-     * @var string
-     */
-    protected string $fromAccount;
-
-    /**
      * Group constructor.
+     *
      * @param Tim $app
-     * @param string|int $fromAccount
+     * @param string $fromAccount
      */
-    #[Pure] public function __construct(Tim $app, string|int $fromAccount)
+    public function __construct(protected Tim $app, protected string $fromAccount)
     {
-        parent::__construct($app);
-
-        $this->fromAccount = (string)$fromAccount;
+        parent::__construct($this->app);
     }
 
     /**
@@ -45,39 +38,14 @@ class Group extends AbstractService
      */
     public function add(array|string $groupName, array|string|int $toAccount = null): Collection
     {
-        $data = [
-            'From_Account' => $this->fromAccount,
-            'GroupName'    => Arr::wrap($groupName),
-        ];
-
-        isset($toAccount) && $data['To_Account'] = array_map('strval', Arr::wrap($toAccount));
-
-        return $this->httpPostJson('v4/sns/group_add', $data);
-    }
-
-    /**
-     * 拉取分组
-     *
-     * @see https://cloud.tencent.com/document/product/269/54763
-     *
-     * @param bool $needFriend 是否需要拉取分组下的 User 列表
-     * @param array|string|null $groupName 要拉取的分组名称
-     *
-     * @return Collection
-     *
-     * @throws InvalidConfigException
-     * @throws GuzzleException
-     */
-    public function get(bool $needFriend = false, array|string $groupName = null): Collection
-    {
-        $data = [
-            'From_Account' => $this->fromAccount,
-        ];
-
-        isset($needFriend) && $data['NeedFriend'] = 'Need_Friend_Type_Yes';
-        isset($groupName) && $data['GroupName'] = Arr::wrap($groupName);
-
-        return $this->httpPostJson('v4/sns/group_get', $data);
+        return $this->httpPostJson(
+            'v4/sns/group_add',
+            array_merge([
+                'From_Account' => $this->fromAccount,
+                'GroupName'    => Arr::wrap($groupName),
+            ], array_filter([
+                'To_Account' => array_map('strval', Arr::wrap($toAccount)),
+            ])));
     }
 
     /**
@@ -99,4 +67,31 @@ class Group extends AbstractService
             'GroupName'    => Arr::wrap($groupName),
         ]);
     }
+
+    /**
+     * 拉取分组
+     *
+     * @see https://cloud.tencent.com/document/product/269/54763
+     *
+     * @param array|string $groupName 要拉取的分组名称
+     * @param bool $needFriend 是否需要拉取分组下的 User 列表
+     *
+     * @return Collection
+     *
+     * @throws InvalidConfigException
+     * @throws GuzzleException
+     */
+    public function get(array|string $groupName = [], bool $needFriend = false): Collection
+    {
+        return $this->httpPostJson(
+            'v4/sns/group_get',
+            array_merge([
+                'From_Account' => $this->fromAccount,
+            ], array_filter([
+                'GroupName'  => Arr::wrap($groupName),
+                'NeedFriend' => $needFriend ? 'Need_Friend_Type_Yes' : '',
+            ])));
+    }
+
+
 }
