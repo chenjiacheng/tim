@@ -10,6 +10,7 @@ use Chenjiacheng\Tim\Provider\ContactServiceProvider;
 use Chenjiacheng\Tim\Provider\GroupServiceProvider;
 use Chenjiacheng\Tim\Provider\MessageServiceProvider;
 use Chenjiacheng\Tim\Provider\OperateServiceProvider;
+use Chenjiacheng\Tim\Provider\OverallServiceProvider;
 use Chenjiacheng\Tim\Provider\ProfileServiceProvider;
 use Chenjiacheng\Tim\Provider\PushServiceProvider;
 use Chenjiacheng\Tim\Provider\SmsServiceProvider;
@@ -18,6 +19,7 @@ use Chenjiacheng\Tim\Service\Contact;
 use Chenjiacheng\Tim\Service\Group;
 use Chenjiacheng\Tim\Service\Message;
 use Chenjiacheng\Tim\Service\Operate;
+use Chenjiacheng\Tim\Service\Overall;
 use Chenjiacheng\Tim\Service\Profile;
 use Chenjiacheng\Tim\Service\Push;
 use Chenjiacheng\Tim\Service\Sms;
@@ -30,6 +32,7 @@ use Pimple\Container;
  * @property Group $group
  * @property Message $message
  * @property Operate $operate
+ * @property Overall $overall
  * @property Profile $profile
  * @property Push $push
  * @property Sms $sms
@@ -47,6 +50,7 @@ class Tim extends Container
         GroupServiceProvider::class,
         MessageServiceProvider::class,
         OperateServiceProvider::class,
+        OverallServiceProvider::class,
         ProfileServiceProvider::class,
         PushServiceProvider::class,
         SmsServiceProvider::class,
