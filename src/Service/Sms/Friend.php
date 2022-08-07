@@ -4,31 +4,28 @@ declare(strict_types=1);
 
 namespace Chenjiacheng\Tim\Service\Sms;
 
+use Chenjiacheng\Tim\Constant\FriendAddType;
+use Chenjiacheng\Tim\Constant\FriendCheckType;
+use Chenjiacheng\Tim\Constant\FriendDeleteType;
+use Chenjiacheng\Tim\Exception\InvalidArgumentException;
 use Chenjiacheng\Tim\Exception\InvalidConfigException;
 use Chenjiacheng\Tim\Service\AbstractService;
 use Chenjiacheng\Tim\Support\Arr;
 use Chenjiacheng\Tim\Support\Collection;
 use Chenjiacheng\Tim\Tim;
 use GuzzleHttp\Exception\GuzzleException;
-use JetBrains\PhpStorm\Pure;
 
 class Friend extends AbstractService
 {
     /**
-     * @var string
-     */
-    protected string $fromAccount;
-
-    /**
      * Friend constructor.
+     *
      * @param Tim $app
-     * @param string|int $fromAccount
+     * @param string $fromAccount
      */
-    #[Pure] public function __construct(Tim $app, string|int $fromAccount)
+    public function __construct(protected Tim $app, protected string $fromAccount)
     {
-        parent::__construct($app);
-
-        $this->fromAccount = (string)$fromAccount;
+        parent::__construct($this->app);
     }
 
     /**
@@ -37,23 +34,30 @@ class Friend extends AbstractService
      * @see https://cloud.tencent.com/document/product/269/1643
      *
      * @param array $addFriendItem 好友结构体对象
-     * @param bool $addTypeSingle 加好友方式：true 表示单向加好友，false 表示双向加好友
-     * @param bool $forceAddFlags 管理员强制加好友标记：true 表示强制加好友，false 表示常规加好友方式
+     * @param string $addType 加好友方式（默认双向加好友方式）：单向加好友=FriendAddType::SINGLE，双向加好友=FriendAddType::BOTH
+     * @param bool $forceAddFlags 是否管理员强制加好友标记
+     *
      * @return Collection
      *
+     * @throws InvalidArgumentException
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function add(array $addFriendItem, bool $addTypeSingle = false, bool $forceAddFlags = false): Collection
+    public function add(array $addFriendItem, string $addType = '', bool $forceAddFlags = false): Collection
     {
+        if (!empty($addType) && !in_array($addType, [FriendAddType::SINGLE, FriendAddType::BOTH])) {
+            throw new InvalidArgumentException(sprintf('Unsupported add type "%s"', $addType));
+        }
+
         return $this->httpPostJson(
             'v4/sns/friend_add',
-            [
+            array_merge([
                 'From_Account'  => $this->fromAccount,
                 'AddFriendItem' => $addFriendItem,
-                'AddType'       => $addTypeSingle ? 'Add_Type_Single' : 'Add_Type_Both',
+            ], array_filter([
+                'AddType'       => $addType,
                 'ForceAddFlags' => $forceAddFlags ? 1 : 0,
-            ]);
+            ])));
     }
 
     /**
@@ -106,21 +110,26 @@ class Friend extends AbstractService
      * @see https://cloud.tencent.com/document/product/269/1644
      *
      * @param array|string|int $toAccount 待删除的好友的 UserID 列表，单次请求的 To_Account 数不得超过1000
-     * @param bool $deleteTypeSingle 删除模式：true 单向删除好友，false 双向删除好友
+     * @param string $deleteType 删除模式：单向删除好友=FriendDeleteType::SINGLE，双向删除好友=FriendDeleteType::BOTH
      *
      * @return Collection
      *
+     * @throws InvalidArgumentException
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function delete(array|string|int $toAccount, bool $deleteTypeSingle = false): Collection
+    public function delete(array|string|int $toAccount, string $deleteType = FriendDeleteType::BOTH): Collection
     {
+        if (!empty($deleteType) && !in_array($deleteType, [FriendDeleteType::SINGLE, FriendDeleteType::BOTH])) {
+            throw new InvalidArgumentException(sprintf('Unsupported delete type "%s"', $deleteType));
+        }
+
         return $this->httpPostJson(
             'v4/sns/friend_delete',
             [
                 'From_Account' => $this->fromAccount,
                 'To_Account'   => array_map('strval', Arr::wrap($toAccount)),
-                'DeleteType'   => $deleteTypeSingle ? 'Delete_Type_Single' : 'Delete_Type_Both',
+                'DeleteType'   => $deleteType,
             ]);
     }
 
@@ -129,20 +138,25 @@ class Friend extends AbstractService
      *
      * @see https://cloud.tencent.com/document/product/269/1645
      *
-     * @param bool $deleteTypeSingle 删除模式：true 单向删除好友，false 双向删除好友
+     * @param string $deleteType 删除模式：单向删除好友=FriendDeleteType::SINGLE，双向删除好友=FriendDeleteType::BOTH
      *
      * @return Collection
      *
+     * @throws InvalidArgumentException
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function deleteAll(bool $deleteTypeSingle = false): Collection
+    public function deleteAll(string $deleteType = FriendDeleteType::BOTH): Collection
     {
+        if (!empty($deleteType) && !in_array($deleteType, [FriendDeleteType::SINGLE, FriendDeleteType::BOTH])) {
+            throw new InvalidArgumentException(sprintf('Unsupported delete type "%s"', $deleteType));
+        }
+
         return $this->httpPostJson(
             'v4/sns/friend_delete_all',
             [
                 'From_Account' => $this->fromAccount,
-                'DeleteType'   => $deleteTypeSingle ? 'Delete_Type_Single' : 'Delete_Type_Both',
+                'DeleteType'   => $deleteType,
             ]);
     }
 
@@ -152,21 +166,21 @@ class Friend extends AbstractService
      * @see https://cloud.tencent.com/document/product/269/1646
      *
      * @param array|string|int $toAccount 请求校验的好友的 UserID 列表，单次请求的 To_Account 数不得超过1000
-     * @param bool $checkTypeSingle 校验模式：true 单向校验好友关系，false 双向校验好友关系
+     * @param string $checkType 校验模式：单向校验好友关系=FriendCheckType::CheckResult_Type_Single，双向校验好友关系=FriendCheckType::CheckResult_Type_Both
      *
      * @return Collection
      *
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function check(array|string|int $toAccount, bool $checkTypeSingle = false): Collection
+    public function check(array|string|int $toAccount, string $checkType = FriendCheckType::BOTH): Collection
     {
         return $this->httpPostJson(
             'v4/sns/friend_check',
             [
                 'From_Account' => $this->fromAccount,
                 'To_Account'   => array_map('strval', Arr::wrap($toAccount)),
-                'CheckType'    => $checkTypeSingle ? 'CheckResult_Type_Single' : 'CheckResult_Type_Both',
+                'CheckType'    => $checkType,
             ]);
     }
 
@@ -188,12 +202,13 @@ class Friend extends AbstractService
     {
         return $this->httpPostJson(
             'v4/sns/friend_get',
-            [
-                'From_Account'     => $this->fromAccount,
-                'StartIndex'       => $startIndex,
+            array_merge([
+                'From_Account' => $this->fromAccount,
+                'StartIndex'   => $startIndex,
+            ], array_filter([
                 'StandardSequence' => $standardSequence,
                 'CustomSequence'   => $customSequence,
-            ]);
+            ])));
     }
 
     /**

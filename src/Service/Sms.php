@@ -31,7 +31,7 @@ class Sms extends AbstractService
      */
     public function friend(string|int $fromAccount): Friend
     {
-        return new Friend($this->app, $fromAccount);
+        return new Friend($this->app, (string)$fromAccount);
     }
 
     /**
@@ -43,6 +43,6 @@ class Sms extends AbstractService
      */
     public function group(string|int $fromAccount): Group
     {
-        return new Group($this->app, $fromAccount);
+        return new Group($this->app, (string)$fromAccount);
     }
 }
