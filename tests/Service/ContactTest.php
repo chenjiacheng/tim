@@ -17,7 +17,7 @@ class ContactTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->contact->getList('105');
+        $result = $tim->contact->getList('101');
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -29,7 +29,7 @@ class ContactTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->contact->deleteC2C('105', '106');
+        $result = $tim->contact->deleteC2C('101', '102');
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -41,7 +41,7 @@ class ContactTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->contact->deleteG2C('105', '@#123456');
+        $result = $tim->contact->deleteG2C('101', '@#123456');
         $this->assertSame('OK', $result['ActionStatus']);
     }
 }

@@ -15,20 +15,20 @@ class Contact extends AbstractService
      *
      * @see https://cloud.tencent.com/document/product/269/62118
      *
-     * @param string|int $fromUserId
-     * @param int $timeStamp
-     * @param int $startIndex
-     * @param int $topTimeStamp
-     * @param int $topStartIndex
-     * @param int $assistFlags
+     * @param string|int $fromUserId 填 UserID，请求拉取该用户的会话列表
+     * @param int $timeStamp 普通会话的起始时间，第一页填 0
+     * @param int $startIndex 普通会话的起始位置，第一页填 0
+     * @param int $topTimeStamp 置顶会话的起始时间，第一页填 0
+     * @param int $topStartIndex 置顶会话的起始位置，第一页填 0
+     * @param int $assistFlags 会话辅助标志位：bit 0 - 是否支持置顶会话，bit 1 - 是否返回空会话，bit 2 - 是否支持置顶会话分页
      *
      * @return Collection
      *
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function getList(string|int $fromUserId, int $timeStamp = 0, int $startIndex = 0,
-                            int $topTimeStamp = 0, int $topStartIndex = 0, int $assistFlags = 0): Collection
+    public function getList(string|int $fromUserId, int $timeStamp = 0, int $startIndex = 0, int $topTimeStamp = 0,
+                            int $topStartIndex = 0, int $assistFlags = 0): Collection
     {
         return $this->httpPostJson(
             'v4/recentcontact/get_list',
@@ -47,9 +47,9 @@ class Contact extends AbstractService
      *
      * @see https://cloud.tencent.com/document/product/269/62119
      *
-     * @param string|int $fromUserId
-     * @param string|int $toUserId
-     * @param bool $clearRamble
+     * @param string|int $fromUserId 请求删除该 UserID 的会话
+     * @param string|int $toUserId 会话方的 UserID
+     * @param bool $clearRamble 是否清理漫游消息
      *
      * @return \Chenjiacheng\Tim\Support\Collection
      *
@@ -61,8 +61,8 @@ class Contact extends AbstractService
         return $this->httpPostJson(
             'v4/recentcontact/delete',
             [
-                'From_Account' => (string)$fromUserId,
                 'Type'         => 1,
+                'From_Account' => (string)$fromUserId,
                 'To_Account'   => (string)$toUserId,
                 'ClearRamble'  => $clearRamble ? 1 : 0,
             ]);
@@ -73,9 +73,9 @@ class Contact extends AbstractService
      *
      * @see https://cloud.tencent.com/document/product/269/62119
      *
-     * @param string|int $fromUserId
-     * @param string $toGroupId
-     * @param bool $clearRamble
+     * @param string|int $fromUserId 请求删除该 UserID 的会话
+     * @param string $toGroupId 会话的群 ID
+     * @param bool $clearRamble 是否清理漫游消息
      *
      * @return \Chenjiacheng\Tim\Support\Collection
      *
@@ -87,8 +87,8 @@ class Contact extends AbstractService
         return $this->httpPostJson(
             'v4/recentcontact/delete',
             [
-                'From_Account' => (string)$fromUserId,
                 'Type'         => 2,
+                'From_Account' => (string)$fromUserId,
                 'ToGroupid'    => $toGroupId,
                 'ClearRamble'  => $clearRamble ? 1 : 0,
             ]);
