@@ -6,9 +6,6 @@ namespace Chenjiacheng\Tim\Constant;
 
 /**
  * 申请加群处理方式
- *
- * Class GroupApplyJoinOption
- * @package Chenjiacheng\Tim\Constant
  */
 class GroupApplyJoinOption
 {

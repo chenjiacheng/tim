@@ -6,9 +6,6 @@ namespace Chenjiacheng\Tim\Constant;
 
 /**
  * 管理员禁止加好友标识
- *
- * Class ProfileAdminForbidType
- * @package Chenjiacheng\Tim\Constant
  */
 class ProfileAdminForbidType
 {

@@ -6,9 +6,6 @@ namespace Chenjiacheng\Tim\Constant;
 
 /**
  * 性别
- *
- * Class ProfileGenderType
- * @package Chenjiacheng\Tim\Constant
  */
 class ProfileGenderType
 {

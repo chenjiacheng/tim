@@ -6,9 +6,6 @@ namespace Chenjiacheng\Tim\Constant;
 
 /**
  * 群组类型
- *
- * Class GroupType
- * @package Chenjiacheng\Tim\Constant
  */
 class GroupType
 {
