@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace Chenjiacheng\Tim\Constant;
 
+/**
+ * 群内群成员身份
+ *
+ * Class GroupMemberRole
+ * @package Chenjiacheng\Tim\Constant
+ */
 class GroupMemberRole
 {
     /**

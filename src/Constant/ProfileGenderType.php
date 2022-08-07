@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace Chenjiacheng\Tim\Constant;
 
+/**
+ * 性别
+ *
+ * Class ProfileGenderType
+ * @package Chenjiacheng\Tim\Constant
+ */
 class ProfileGenderType
 {
     /**

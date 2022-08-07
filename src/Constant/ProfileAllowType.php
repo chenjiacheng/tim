@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace Chenjiacheng\Tim\Constant;
 
+/**
+ * 加好友验证方式
+ *
+ * Class ProfileAllowType
+ * @package Chenjiacheng\Tim\Constant
+ */
 class ProfileAllowType
 {
     /**

@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace Chenjiacheng\Tim\Constant;
 
+/**
+ * 标配资料字段
+ *
+ * Class ProfileTag
+ * @package Chenjiacheng\Tim\Constant
+ */
 class ProfileTag
 {
     /**
