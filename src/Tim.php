@@ -58,7 +58,7 @@ class Tim extends Container
     protected array $config;
 
     /**
-     * Application constructor.
+     * Tim constructor.
      *
      * @param array $config
      */

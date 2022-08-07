@@ -62,7 +62,7 @@ class Account extends AbstractService
      *
      * @see https://cloud.tencent.com/document/product/269/36443
      *
-     * @param array|string|int $accounts 请求删除的 UserID 数组，单次请求最多支持100个帐号
+     * @param array|string|int $accounts 请求删除的帐号的 UserID 数组，单次请求最多支持100个帐号
      *
      * @return Collection
      *
@@ -88,7 +88,7 @@ class Account extends AbstractService
      *
      * @see https://cloud.tencent.com/document/product/269/38417
      *
-     * @param array|string|int $accounts 请求删除的 UserID 数组，单次请求最多支持100个帐号
+     * @param array|string|int $accounts 请求检查的帐号的 UserID 数组，单次请求最多支持100个帐号
      *
      * @return Collection
      *
@@ -106,8 +106,7 @@ class Account extends AbstractService
             'v4/im_open_login_svc/account_check',
             [
                 'CheckItem' => $checkItem
-            ]
-        );
+            ]);
     }
 
     /**
@@ -128,8 +127,7 @@ class Account extends AbstractService
             'v4/im_open_login_svc/kick',
             [
                 'UserID' => (string)$account,
-            ]
-        );
+            ]);
     }
 
     /**
@@ -138,21 +136,21 @@ class Account extends AbstractService
      * @see https://cloud.tencent.com/document/product/269/2566
      *
      * @param array|string|int $toAccount 需要查询这些 UserID 的登录状态，一次最多查询500个 UserID 的状态
-     * @param int $isNeedDetail 是否需要返回详细的登录平台信息。0表示不需要，1表示需要
+     * @param bool $isNeedDetail 是否需要返回详细的登录平台信息
      *
      * @return Collection
      *
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function queryStatus(array|string|int $toAccount, int $isNeedDetail = 0): Collection
+    public function queryStatus(array|string|int $toAccount, bool $isNeedDetail = false): Collection
     {
         return $this->httpPostJson(
             'v4/openim/query_online_status',
-            [
-                'To_Account'   => array_map('strval', Arr::wrap($toAccount)),
-                'IsNeedDetail' => $isNeedDetail,
-            ]
-        );
+            array_merge([
+                'To_Account' => array_map('strval', Arr::wrap($toAccount)),
+            ], array_filter([
+                'IsNeedDetail' => $isNeedDetail ? 1 : 0,
+            ])));
     }
 }

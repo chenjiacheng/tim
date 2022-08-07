@@ -20,7 +20,19 @@ class AccountTest extends TimTest
         $result = $tim->account->import('101');
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->account->import(102, 'haha');
+        $result = $tim->account->import('102', 'user102');
+        $this->assertSame('OK', $result['ActionStatus']);
+
+        $result = $tim->account->import('103', 'user103', 'https://avatars.githubusercontent.com/u/15870542');
+        $this->assertSame('OK', $result['ActionStatus']);
+
+        $result = $tim->account->import(104);
+        $this->assertSame('OK', $result['ActionStatus']);
+
+        $result = $tim->account->import(105, 'user105');
+        $this->assertSame('OK', $result['ActionStatus']);
+
+        $result = $tim->account->import(106, 'user106', 'https://avatars.githubusercontent.com/u/15870542');
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -32,10 +44,13 @@ class AccountTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->account->multiImport(['103', '104']);
+        $result = $tim->account->multiImport(['107', '108']);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->account->multiImport(['105', 106]);
+        $result = $tim->account->multiImport(['109', 110]);
+        $this->assertSame('OK', $result['ActionStatus']);
+
+        $result = $tim->account->multiImport([111, 112]);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -47,13 +62,16 @@ class AccountTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->account->delete(['101', 102]);
+        $result = $tim->account->delete(['107', '108']);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->account->delete('103');
+        $result = $tim->account->delete(['109', 110]);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->account->delete(104);
+        $result = $tim->account->delete('111');
+        $this->assertSame('OK', $result['ActionStatus']);
+
+        $result = $tim->account->delete(112);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -65,19 +83,19 @@ class AccountTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->account->check(['105', '106']);
+        $result = $tim->account->check(['101', '102']);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->account->check(['105', 106]);
+        $result = $tim->account->check(['101', 102]);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->account->check([105, 106]);
+        $result = $tim->account->check([101, 102]);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->account->check('105');
+        $result = $tim->account->check('101');
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->account->check(106);
+        $result = $tim->account->check(102);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -89,10 +107,10 @@ class AccountTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->account->kick('105');
+        $result = $tim->account->kick('101');
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->account->kick(106);
+        $result = $tim->account->kick(102);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -104,16 +122,19 @@ class AccountTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->account->queryStatus(['105', '106']);
+        $result = $tim->account->queryStatus(['101', '102']);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->account->queryStatus(['105', 106]);
+        $result = $tim->account->queryStatus(['101', 102], true);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->account->queryStatus('105');
+        $result = $tim->account->queryStatus([101, 102]);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->account->queryStatus(106);
+        $result = $tim->account->queryStatus('101', true);
+        $this->assertSame('OK', $result['ActionStatus']);
+
+        $result = $tim->account->queryStatus(102);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 }
