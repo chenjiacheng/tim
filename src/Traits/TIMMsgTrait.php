@@ -15,7 +15,7 @@ use Chenjiacheng\Tim\Traits\TIMMsgElement\TIMVideoFileElem;
 
 trait TIMMsgTrait
 {
-    public array $msgBody;
+    public array $msgBody = [];
 
     /**
      * 设置文本消息元素
@@ -109,53 +109,47 @@ trait TIMMsgTrait
     /**
      * 设置图片消息元素
      *
-     * @param array|string $urls 原图、缩略图或者大图下载信息
+     * @param array|string $image 原图、缩略图或者大图下载信息：type,size,width,height,url
      * @param string|null $uuid 图片的唯一标识，客户端用于索引图片的键值
      *
      * @return $this
      */
-    public function setTIMImageElem(array|string $urls, string $uuid = null): static
+    public function setTIMImageElem(array|string $image, string $uuid = null): static
     {
         $imageInfoArray = [];
-        $imageFormat = '';
 
-        if (is_array($urls)) {
-            for ($i = 0; $i < 3; $i++) {
-                [$width, $height, $suffix] = getimagesize($urls[$i]);
-                if ($i == 0) {
-                    $imageFormat = match ($suffix) {
-                        1 => 2,
-                        2 => 1,
-                        3 => 3,
-                        6 => 4,
-                        default => 255,
-                    };
-                }
+        if (is_array($image)) {
+            foreach ($image as $item) {
+
+                if (isset($suffix)) [$width, $height] = getimagesize($item['url']);
+                else [$width, $height, $suffix] = getimagesize($item['url']);
+
                 $imageInfoArray[] = [
-                    'Type'   => $i + 1,
-                    'Size'   => 0,
-                    'Width'  => $width,
-                    'Height' => $height,
-                    'URL'    => $urls[$i],
+                    'Type'   => $item['type'],
+                    'Size'   => $item['size'] ?? 0,
+                    'Width'  => $item['width'] ?? $width,
+                    'Height' => $item['height'] ?? $height,
+                    'URL'    => $item['url'],
                 ];
             }
         } else {
-            [$width, $height, $suffix] = getimagesize($urls);
-            $imageFormat = match ($suffix) {
-                1 => 2,
-                2 => 1,
-                3 => 3,
-                6 => 4,
-                default => 255,
-            };
+            [$width, $height, $suffix] = getimagesize($image);
             $imageInfoArray[] = [
                 'Type'   => 1,
                 'Size'   => 0,
                 'Width'  => $width,
                 'Height' => $height,
-                'URL'    => $urls,
+                'URL'    => $image,
             ];
         }
+
+        $imageFormat = match ($suffix ?? 0) {
+            1 => 2,
+            2 => 1,
+            3 => 3,
+            6 => 4,
+            default => 255,
+        };
 
         $TIMMsg = new TIMImageElem($uuid ?? $this->getUUID(), $imageFormat, $imageInfoArray);
 
