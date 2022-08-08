@@ -5,20 +5,20 @@ declare(strict_types=1);
 namespace Chenjiacheng\Tim\Traits\TIMMsgElement;
 
 use Chenjiacheng\Tim\Contract\TIMMsgInterface;
-use JetBrains\PhpStorm\ArrayShape;
 
 class TIMFileElem implements TIMMsgInterface
 {
-    protected string $url;
-    protected string $uuid;
-
-    public function __construct(string $url, string $uuid)
+    /**
+     * @param string $url 文件下载地址，可通过该 URL 地址直接下载相应文件
+     * @param string $uuid 文件的唯一标识，客户端用于索引文件的键值
+     * @param int $fileSize 文件数据大小，单位：字节
+     * @param string $fileName 文件名称
+     * @param int $downloadFlag 文件下载方式标记。目前 Download_Flag 取值只能为2，表示可通过Url字段值的 URL 地址直接下载文件
+     */
+    public function __construct(public string $url, public string $uuid, public int $fileSize, public string $fileName, public int $downloadFlag)
     {
-        $this->url = $url;
-        $this->uuid = $uuid;
     }
 
-    #[ArrayShape(['MsgType' => "string", 'MsgContent' => "array"])]
     public function output(): array
     {
         return [
@@ -26,9 +26,9 @@ class TIMFileElem implements TIMMsgInterface
             'MsgContent' => [
                 'Url'           => $this->url,
                 'UUID'          => $this->uuid,
-                'FileSize'      => filesize($this->url),
-                'FileName'      => basename($this->url),
-                'Download_Flag' => 2,
+                'FileSize'      => $this->fileSize,
+                'FileName'      => $this->fileName,
+                'Download_Flag' => $this->downloadFlag,
             ]
         ];
     }

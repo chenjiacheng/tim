@@ -5,20 +5,17 @@ declare(strict_types=1);
 namespace Chenjiacheng\Tim\Traits\TIMMsgElement;
 
 use Chenjiacheng\Tim\Contract\TIMMsgInterface;
-use JetBrains\PhpStorm\ArrayShape;
 
 class TIMFaceElem implements TIMMsgInterface
 {
-    protected int $index;
-    protected string $data;
-
-    public function __construct(int $index, string $data)
+    /**
+     * @param int $index 表情索引，用户自定义
+     * @param string $data 额外数据
+     */
+    public function __construct(public int $index, public string $data)
     {
-        $this->index = $index;
-        $this->data = $data;
     }
 
-    #[ArrayShape(['MsgType' => "string", 'MsgContent' => "array"])]
     public function output(): array
     {
         return [

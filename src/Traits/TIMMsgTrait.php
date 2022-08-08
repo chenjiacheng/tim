@@ -15,52 +15,61 @@ use Chenjiacheng\Tim\Traits\TIMMsgElement\TIMVideoFileElem;
 
 trait TIMMsgTrait
 {
-    protected array $msgBody;
+    public array $msgBody;
 
     /**
-     * 发送文本消息
+     * 设置文本消息元素
      *
-     * @param string $text
+     * @param string $text 消息内容
      *
      * @return $this
      */
     public function setTIMTextElem(string $text): static
     {
-        $this->msgBody[] = (new TIMTextElem($text))->output();
+        $TIMMsg = new TIMTextElem($text);
+
+        $this->msgBody[] = $TIMMsg->output();
+
         return $this;
     }
 
     /**
-     * 发送位置消息
+     * 设置位置消息元素
      *
-     * @param string $dec
-     * @param float $latitude
-     * @param float $longitude
+     * @param string $dec 地理位置描述信息
+     * @param float $latitude 纬度
+     * @param float $longitude 经度
      *
      * @return $this
      */
     public function setTIMLocationElem(string $dec, float $latitude, float $longitude): static
     {
-        $this->msgBody[] = (new TIMLocationElem($dec, $latitude, $longitude))->output();
+        $TIMMsg = new TIMLocationElem($dec, $latitude, $longitude);
+
+        $this->msgBody[] = $TIMMsg->output();
+
         return $this;
     }
 
     /**
-     * 发送表情消息
+     * 设置表情消息元素
      *
-     * @param int $index
-     * @param string $data
+     * @param int $index 表情索引，用户自定义
+     * @param string $data 额外数据
      *
      * @return $this
      */
     public function setTIMFaceElem(int $index, string $data): static
     {
-        $this->msgBody[] = (new TIMFaceElem($index, $data))->output();
+        $TIMMsg = new TIMFaceElem($index, $data);
+
+        $this->msgBody[] = $TIMMsg->output();
+
         return $this;
     }
 
     /**
-     * 发送自定义消息
+     * 设置自定义消息元素
      *
      * @param string $data
      * @param string $desc
@@ -71,75 +80,163 @@ trait TIMMsgTrait
      */
     public function setTIMCustomElem(string $data, string $desc, string $ext, string $sound): static
     {
-        $this->msgBody[] = (new TIMCustomElem($data, $desc, $ext, $sound))->output();
+        $TIMMsg = new TIMCustomElem($data, $desc, $ext, $sound);
+
+        $this->msgBody[] = $TIMMsg->output();
+
         return $this;
     }
 
     /**
-     * 发送语音消息
+     * 设置语音消息元素
      *
-     * @param string $url
-     * @param string $uuid
-     * @param int $size
-     * @param int $second
-     * @param int $downloadFlag
+     * @param string $url 语音下载地址，可通过该 URL 地址直接下载相应语音
+     * @param string|null $uuid 语音的唯一标识，客户端用于索引语音的键值
+     * @param int $size 语音数据大小，单位：字节
+     * @param int $second 语音时长，单位：秒
      *
      * @return $this
      */
-    public function setTIMSoundElem(string $url, string $uuid, int $size, int $second, int $downloadFlag): static
+    public function setTIMSoundElem(string $url, string $uuid = null, int $size = 0, int $second = 0): static
     {
-        $this->msgBody[] = (new TIMSoundElem($url, $uuid, $size, $second, $downloadFlag))->output();
+        $TIMMsg = new TIMSoundElem($url, $uuid ?? $this->getUUID(), $size, $second, 2);
+
+        $this->msgBody[] = $TIMMsg->output();
+
         return $this;
     }
 
     /**
-     * 发送图片消息
+     * 设置图片消息元素
      *
-     * @param string $url
+     * @param array|string $urls 原图、缩略图或者大图下载信息
+     * @param string|null $uuid 图片的唯一标识，客户端用于索引图片的键值
      *
      * @return $this
      */
-    public function setTIMImageElem(string $url): static
+    public function setTIMImageElem(array|string $urls, string $uuid = null): static
     {
-        $this->msgBody[] = (new TIMImageElem($url, $this->getUUID()))->output();
+        $imageInfoArray = [];
+        $imageFormat = '';
+
+        if (is_array($urls)) {
+            for ($i = 0; $i < 3; $i++) {
+                [$width, $height, $suffix] = getimagesize($urls[$i]);
+                if ($i == 0) {
+                    $imageFormat = match ($suffix) {
+                        1 => 2,
+                        2 => 1,
+                        3 => 3,
+                        6 => 4,
+                        default => 255,
+                    };
+                }
+                $imageInfoArray[] = [
+                    'Type'   => $i + 1,
+                    'Size'   => 0,
+                    'Width'  => $width,
+                    'Height' => $height,
+                    'URL'    => $urls[$i],
+                ];
+            }
+        } else {
+            [$width, $height, $suffix] = getimagesize($urls);
+            $imageFormat = match ($suffix) {
+                1 => 2,
+                2 => 1,
+                3 => 3,
+                6 => 4,
+                default => 255,
+            };
+            $imageInfoArray[] = [
+                'Type'   => 1,
+                'Size'   => 0,
+                'Width'  => $width,
+                'Height' => $height,
+                'URL'    => $urls,
+            ];
+        }
+
+        $TIMMsg = new TIMImageElem($uuid ?? $this->getUUID(), $imageFormat, $imageInfoArray);
+
+        $this->msgBody[] = $TIMMsg->output();
+
         return $this;
     }
 
     /**
-     * 发送文件消息
+     * 设置文件消息元素
      *
-     * @param string $url
+     * @param string $url 文件下载地址，可通过该 URL 地址直接下载相应文件
+     * @param string|null $uuid 文件的唯一标识，客户端用于索引文件的键值
+     * @param int $fileSize 文件数据大小，单位：字节
+     * @param string $fileName 文件名称
      *
      * @return $this
      */
-    public function setTIMFileElem(string $url): static
+    public function setTIMFileElem(string $url, string $uuid = null, int $fileSize = 0, string $fileName = ''): static
     {
-        $this->msgBody[] = (new TIMFileElem($url, $this->getUUID()))->output();
+        $TIMMsg = new TIMFileElem($url, $uuid ?? $this->getUUID(), $fileSize, $fileName, 2);
+
+        $this->msgBody[] = $TIMMsg->output();
+
         return $this;
     }
 
     /**
-     * 发送视频消息
+     * 设置视频消息元素
      *
-     * @param string $videoUrl
-     * @param string $videoUUID
-     * @param string $videoSize
-     * @param string $videoSecond
-     * @param string $videoFormat
-     * @param string $videoDownloadFlag
-     * @param string $thumbUrl
-     * @param string $thumbUUID
-     * @param string $thumbSize
-     * @param string $thumbWidth
-     * @param string $thumbHeight
-     * @param string $thumbFormat
-     * @param string $thumbDownloadFlag
+     * @param array|string $video 视频信息：url,uuid,size,second,format
+     * @param array|string $thumb 视频缩略图信息：url,uuid,size,width,height,format
      *
      * @return $this
      */
-    public function setTIMVideoFileElem(string $videoUrl, string $videoUUID, string $videoSize, string $videoSecond, string $videoFormat, string $videoDownloadFlag, string $thumbUrl, string $thumbUUID, string $thumbSize, string $thumbWidth, string $thumbHeight, string $thumbFormat, string $thumbDownloadFlag): static
+    public function setTIMVideoFileElem(array|string $video, array|string $thumb): static
     {
-        $this->msgBody[] = (new TIMVideoFileElem($videoUrl, $videoUUID, $videoSize, $videoSecond, $videoFormat, $videoDownloadFlag, $thumbUrl, $thumbUUID, $thumbSize, $thumbWidth, $thumbHeight, $thumbFormat, $thumbDownloadFlag))->output();
+        // 视频信息
+        if (is_array($video)) {
+            $videoUrl = $video['url'] ?? '';
+            $videoUUID = $video['uuid'] ?? $this->getUUID();
+            $videoSize = $video['size'] ?? 0;
+            $videoSecond = $video['second'] ?? 0;
+            $videoFormat = $video['format'] ?? '';
+        } else {
+            $videoUrl = $video;
+            $videoUUID = $this->getUUID();
+            $videoSize = 0;
+            $videoSecond = 0;
+            $videoFormat = '';
+        }
+
+        // 视频缩略图信息
+        if (is_array($thumb)) {
+            $thumbUrl = $thumb['url'] ?? '';
+            $thumbUUID = $thumb['uuid'] ?? $this->getUUID();
+            $thumbSize = $thumb['size'] ?? 0;
+            $thumbWidth = $thumb['width'] ?? 0;
+            $thumbHeight = $thumb['height'] ?? 0;
+            $thumbFormat = $thumb['format'] ?? '';
+        } else {
+            $suffixMap = [
+                1  => 'GIF', 2 => 'JPG', 3 => 'PNG', 4 => 'SWF',
+                5  => 'PSD', 6 => 'BMP', 7 => 'TIFF', 8 => 'TIFF',
+                9  => 'JPC', 10 => 'JP2', 11 => 'JPX', 12 => 'JB2',
+                13 => 'SWC', 14 => 'IFF', 15 => 'WBMP', 16 => 'XBM'
+            ];
+            $thumbUrl = $thumb;
+            $thumbUUID = $this->getUUID();
+            $thumbSize = 0;
+            [$thumbWidth, $thumbHeight, $thumbSuffix] = getimagesize($thumbUrl);
+            $thumbFormat = $suffixMap[$thumbSuffix] ?? '';
+        }
+
+        $TIMMsg = new TIMVideoFileElem(
+            $videoUrl, $videoUUID, $videoSize, $videoSecond, $videoFormat, 2,
+            $thumbUrl, $thumbUUID, $thumbSize, $thumbWidth, $thumbHeight, $thumbFormat, 2
+        );
+
+        $this->msgBody[] = $TIMMsg->output();
+
         return $this;
     }
 }

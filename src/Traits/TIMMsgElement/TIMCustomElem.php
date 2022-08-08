@@ -5,24 +5,19 @@ declare(strict_types=1);
 namespace Chenjiacheng\Tim\Traits\TIMMsgElement;
 
 use Chenjiacheng\Tim\Contract\TIMMsgInterface;
-use JetBrains\PhpStorm\ArrayShape;
 
 class TIMCustomElem implements TIMMsgInterface
 {
-    protected string $data;
-    protected string $desc;
-    protected string $ext;
-    protected string $sound;
-
-    public function __construct(string $data, string $desc, string $ext, string $sound)
+    /**
+     * @param string $data 自定义消息数据
+     * @param string $desc 自定义消息描述信息
+     * @param string $ext 扩展字段
+     * @param string $sound 自定义 APNs 推送铃音
+     */
+    public function __construct(public string $data, public string $desc, public string $ext, public string $sound)
     {
-        $this->data = $data;
-        $this->desc = $desc;
-        $this->ext = $ext;
-        $this->sound = $sound;
     }
 
-    #[ArrayShape(['MsgType' => "string", 'MsgContent' => "array"])]
     public function output(): array
     {
         return [

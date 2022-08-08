@@ -5,22 +5,18 @@ declare(strict_types=1);
 namespace Chenjiacheng\Tim\Traits\TIMMsgElement;
 
 use Chenjiacheng\Tim\Contract\TIMMsgInterface;
-use JetBrains\PhpStorm\ArrayShape;
 
 class TIMLocationElem implements TIMMsgInterface
 {
-    protected string $dec;
-    protected float $latitude;
-    protected float $longitude;
-
-    public function __construct(string $dec, float $latitude, float $longitude)
+    /**
+     * @param string $dec 地理位置描述信息
+     * @param float $latitude 纬度
+     * @param float $longitude 经度
+     */
+    public function __construct(public string $dec, public float $latitude, public float $longitude)
     {
-        $this->dec = $dec;
-        $this->latitude = $latitude;
-        $this->longitude = $longitude;
     }
 
-    #[ArrayShape(['MsgType' => "string", 'MsgContent' => "array"])]
     public function output(): array
     {
         return [

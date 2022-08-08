@@ -5,45 +5,26 @@ declare(strict_types=1);
 namespace Chenjiacheng\Tim\Traits\TIMMsgElement;
 
 use Chenjiacheng\Tim\Contract\TIMMsgInterface;
-use JetBrains\PhpStorm\ArrayShape;
 
 class TIMImageElem implements TIMMsgInterface
 {
-    protected string $url;
-    protected string $uuid;
-
-    public function __construct(string $url, string $uuid)
+    /**
+     * @param string $uuid 图片的唯一标识，客户端用于索引图片的键值
+     * @param int $imageFormat 图片格式：JPG = 1，GIF = 2，PNG = 3，BMP = 4，其他 = 255
+     * @param array $imageInfoArray 原图、缩略图或者大图下载信息
+     */
+    public function __construct(public string $uuid, public int $imageFormat, public array $imageInfoArray)
     {
-        $this->url = $url;
-        $this->uuid = $uuid;
     }
 
-    #[ArrayShape(['MsgType' => "string", 'MsgContent' => "array"])]
     public function output(): array
     {
-        [$width, $height, $suffix] = getimagesize($this->url);
-        $imageFormat = match ($suffix) {
-            1 => 2,
-            2 => 1,
-            3 => 3,
-            6 => 4,
-            default => 255,
-        };
-
         return [
             'MsgType'    => 'TIMImageElem',
             'MsgContent' => [
                 'UUID'           => $this->uuid,
-                'ImageFormat'    => $imageFormat,
-                'ImageInfoArray' => [
-                    [
-                        'Type'   => 1, // 原图
-                        'Size'   => 1,
-                        'Width'  => $width,
-                        'Height' => $height,
-                        'URL'    => $this->url,
-                    ]
-                ],
+                'ImageFormat'    => $this->imageFormat,
+                'ImageInfoArray' => $this->imageInfoArray,
             ]
         ];
     }
