@@ -366,6 +366,99 @@ class GroupTest extends TimTest
      * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
+    public function testSetUnreadMsgNum()
+    {
+        $tim = new Tim($this->config);
+
+        $result = $tim->group->setUnreadMsgNum('@100001', '101', 10);
+        $this->assertSame('OK', $result['ActionStatus']);
+
+        $result = $tim->group->setUnreadMsgNum('@100001', 102, 10);
+        $this->assertSame('OK', $result['ActionStatus']);
+    }
+
+    /**
+     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testDeleteMsgBySender()
+    {
+        $tim = new Tim($this->config);
+
+        $result = $tim->group->deleteMsgBySender('@100001', '101');
+        $this->assertSame('OK', $result['ActionStatus']);
+
+        $result = $tim->group->deleteMsgBySender('@100001', 102);
+        $this->assertSame('OK', $result['ActionStatus']);
+    }
+
+    /**
+     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testGetHistory()
+    {
+        $tim = new Tim($this->config);
+
+        $result = $tim->group->getHistory('@100001');
+        $this->assertSame('OK', $result['ActionStatus']);
+
+        $result = $tim->group->getHistory('@100001', 10);
+        $this->assertSame('OK', $result['ActionStatus']);
+    }
+
+    /**
+     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testGetOnlineMemberNum()
+    {
+        $tim = new Tim($this->config);
+
+        $result = $tim->group->getOnlineMemberNum('@100001');
+        $this->assertSame('OK', $result['ActionStatus']);
+    }
+
+    /**
+     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testGetMembers()
+    {
+        $tim = new Tim($this->config);
+
+        $result = $tim->group->getMembers('@100001');
+        $this->assertSame('OK', $result['ActionStatus']);
+    }
+
+    /**
+     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testGetGroupMsgReceiptDetail()
+    {
+        $tim = new Tim($this->config);
+
+        $result = $tim->group->getGroupMsgReceiptDetail('@100001');
+        $this->assertSame('OK', $result['ActionStatus']);
+    }
+
+    /**
+     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testGetGroupMsgReceipt()
+    {
+        $tim = new Tim($this->config);
+
+        $result = $tim->group->getGroupMsgReceipt('@100001', [1, 2, 3]);
+        $this->assertSame('OK', $result['ActionStatus']);
+    }
+
+    /**
+     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function testDestroy()
     {
         $tim = new Tim($this->config);

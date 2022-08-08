@@ -688,6 +688,7 @@ class Group extends AbstractService
      */
     public function importMember(string $groupId, array $memberList): Collection
     {
+        // TODO 优化 MemberList
         return $this->httpPostJson(
             'v4/group_open_http_svc/import_group_member',
             [
@@ -759,7 +760,7 @@ class Group extends AbstractService
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function groupMsgGetSimple(string $groupId, int $reqMsgNumber, int $reqMsgSeq = 0, int $withRecalledMsg = 0): Collection
+    public function getHistory(string $groupId, int $reqMsgNumber = 20, int $reqMsgSeq = 0, int $withRecalledMsg = 0): Collection
     {
         return $this->httpPostJson(
             'v4/group_open_http_svc/group_msg_get_simple',
@@ -945,7 +946,7 @@ class Group extends AbstractService
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function getGroupMsgReceiptDetail(string $groupId, int $filter, string $cursor, int $count, int $msgSeq): Collection
+    public function getGroupMsgReceiptDetail(string $groupId, int $filter = 1, string $cursor = '', int $count = 200, int $msgSeq = 0): Collection
     {
         return $this->httpPostJson(
             'v4/group_open_http_svc/get_group_msg_receipt_detail',
@@ -965,15 +966,20 @@ class Group extends AbstractService
      * @see https://cloud.tencent.com/document/product/269/77694
      *
      * @param string $groupId 要拉取已读回执详情的群组 ID
-     * @param array $msgSeqList 拉取消息的 seq 列表
+     * @param array|int $msgSeq 拉取消息的 seq 列表
      *
      * @return Collection
      *
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function getGroupMsgReceipt(string $groupId, array $msgSeqList): Collection
+    public function getGroupMsgReceipt(string $groupId, array|int $msgSeq): Collection
     {
+        $msgSeqList = [];
+        foreach (Arr::wrap($msgSeq) as $value) {
+            $msgSeqList[] = ['MsgSeq' => $value];
+        }
+
         return $this->httpPostJson(
             'v4/group_open_http_svc/get_group_msg_receipt',
             [
