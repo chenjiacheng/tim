@@ -8,7 +8,6 @@ use ArrayAccess;
 use ArrayIterator;
 use Countable;
 use IteratorAggregate;
-use JetBrains\PhpStorm\Pure;
 use JsonSerializable;
 use Serializable;
 
@@ -211,7 +210,7 @@ class Collection implements ArrayAccess, Countable, IteratorAggregate, JsonSeria
     /**
      * Build to array.
      */
-    #[Pure] public function toArray(): array
+    public function toArray(): array
     {
         return $this->all();
     }
