@@ -13,132 +13,26 @@
 composer require chenjiacheng/tim
 ```
 
-## 功能列表
-
-帐号管理
-
-* 导入单个帐号
-* 导入多个帐号
-* 删除帐号
-* 查询帐号
-* 失效帐号登录态
-* 查询帐号在线状态
-
-单聊消息
-
-* 单发单聊消息
-* 批量发单聊消息
-* 导入单聊消息
-* 查询单聊消息
-* 撤回单聊消息
-* 设置单聊消息已读
-* 查询单聊未读消息计数
-* 修改单聊历史消息
-
-全员推送
-
-* 全员推送
-* 设置应用属性名称
-* 获取应用属性名称
-* 获取用户属性
-* 设置用户属性
-* 删除用户属性
-* 获取用户标签
-* 添加用户标签
-* 删除用户标签
-* 删除用户所有标签
-
-资料管理
-
-* 设置资料
-* 拉取资料
-
-关系链管理
-
-* 添加好友
-* 导入好友
-* 更新好友
-* 删除好友
-* 删除所有好友
-* 校验好友
-* 拉取好友
-* 拉取指定好友
-* 添加黑名单
-* 删除黑名单
-* 拉取黑名单
-* 校验黑名单
-* 添加分组
-* 删除分组
-* 拉取分组
-
-最近联系人
-
-* 拉取会话列表
-* 删除单个会话
-
-群组管理
-
-* 获取 App 中的所有群组
-* 创建群组
-* 获取群详细资料
-* 获取群成员详细资料
-* 修改群基础资料
-* 增加群成员
-* 删除群成员
-* 修改群成员资料
-* 解散群组
-* 获取用户所加入的群组
-* 查询用户在群组中的身份
-* 批量禁言和取消禁言
-* 获取被禁言群成员列表
-* 在群组中发送普通消息
-* 在群组中发送系统通知
-* 撤回群消息
-* 转让群主
-* 导入群基础资料
-* 导入群消息
-* 导入群成员
-* 设置成员未读消息计数
-* 删除指定用户发送的消息
-* 拉取群历史消息
-* 获取直播群在线人数
-* 获取群自定义属性
-* 修改群自定义属性
-* 清空群自定义属性
-* 重置群自定义属性
-* 修改群聊历史消息
-* 直播群广播消息
-
-全局禁言管理
-
-* 设置全局禁言
-* 查询全局禁言
-
-运营管理
-
-* 拉取运营数据
-* 下载消息记录
-* 获取服务器 IP 地址
-* 聊天文件封禁
-* 聊天文件解封
-* 聊天文件签名
-
 ## 使用示例
 
-帐号管理
-
 ```php
+// 配置信息
 $config = [
     'sdkappid'   => '1400000000',
     'key'        => 'd182df719a269501ec4795f980aa3691cae60412335058c161c3467d3cb0f565',
     'identifier' => 'administrator',
 ];
 
+// 实例化对象
 $tim = new Tim($config);
+```
 
+帐号管理
+
+```php
 // 导入单个帐号
 $tim->account->import('101');
-$tim->account->import('102', 'user102', 'http://www.qq.com');
+$tim->account->import('102', 'user102', 'https://avatars.githubusercontent.com/u/15870542');
 
 // 导入多个帐号
 $tim->account->multiImport(['101', '102']);
@@ -165,15 +59,188 @@ $tim->account->queryStatus('101');
 
 资料管理
 
+```php
+// 设置资料
+$tim->profile->set('101', [
+    ProfileTag::NICK              => 'user101',
+    ProfileTag::GENDER            => ProfileGenderType::MALE,
+    ProfileTag::BIRTHDAY          => 20220801,
+    // ...
+]);
+
+// 获取资料
+$tim->profile->get(['101', 102], [
+    ProfileTag::NICK,
+    ProfileTag::GENDER,
+    ProfileTag::BIRTHDAY,
+    // ...
+]);
+
+$tim->profile->get('101', [
+    ProfileTag::NICK,
+    ProfileTag::GENDER,
+    // ...
+]);
+```
+
 关系链管理
 
+```php
+// 添加好友
+$tim->sms->friend('101')->add([
+    [
+        'To_Account' => '102',
+    ],
+    [
+        'To_Account' => '103',
+        'Remark'     => 'remark1',
+        'GroupName'  => '同学',
+        'AddSource'  => 'AddSource_Type_XXXXXXXX',
+        'AddWording' => 'Im Test1'
+    ],
+]);
+
+// 导入好友
+$tim->sms->friend('101')->import([
+    [
+        'To_Account' => '104',
+        'AddSource'  => 'AddSource_Type_XXXXXXXX',
+    ],
+    [
+        'To_Account' => '105',
+        'Remark'     => 'remark1',
+        'RemarkTime' => time(),
+        'GroupName'  => ['同学'],
+        'AddSource'  => 'AddSource_Type_XXXXXXXX',
+        'AddWording' => 'Im Test1',
+        'AddTime'    => time(),
+        /*'CustomItem' => [
+            ['Tag' => 'Tag_SNS_Custom_XXXX', 'Value' => 'Test'],
+            ['Tag' => 'Tag_SNS_Custom_YYYY', 'Value' => 0],
+        ]*/
+    ],
+]);
+
+// 更新好友
+$tim->sms->friend('101')->update([
+    [
+        'To_Account' => '102',
+        'SnsItem'    => [
+            ['Tag' => FriendTag::GROUP, 'Value' => 'Test'],
+            ['Tag' => FriendTag::REMARK, 'Value' => 'Test'],
+        ]
+    ],
+    [
+        'To_Account' => '103',
+        'SnsItem'    => [
+            ['Tag' => FriendTag::GROUP, 'Value' => ['Test']],
+            ['Tag' => FriendTag::REMARK, 'Value' => 'Test'],
+        ]
+    ],
+]);
+
+// 删除好友
+$tim->sms->friend('101')->delete(['102', 103]);
+$tim->sms->friend('101')->delete('104');
+
+// 删除所有好友
+$tim->sms->friend('101')->deleteAll();
+
+// 校验好友
+$tim->sms->friend('101')->check(['102', 103]);
+$tim->sms->friend('101')->check('104');
+
+// 拉取好友
+$tim->sms->friend('101')->get();
+
+// 拉取指定好友
+$tim->sms->friend('101')->getList(['102', 103], [
+    ProfileTag::NICK,
+    ProfileTag::GENDER,
+    ProfileTag::BIRTHDAY,
+    // ...
+]);
+$tim->sms->friend('101')->getList('104', [
+    ProfileTag::NICK,
+    ProfileTag::GENDER,
+    ProfileTag::BIRTHDAY,
+    // ...
+]);
+
+// 添加黑名单
+$tim->sms->black('101')->add(['103', 104]);
+$tim->sms->black('101')->add('105');
+
+// 拉取黑名单
+$tim->sms->black('101')->get();
+$tim->sms->black(102)->get(0, 2);
+
+// 检验黑名单
+$tim->sms->black('101')->check(['103', 104]);
+$tim->sms->black('101')->check('105', BlackCheckType::BOTH);
+
+// 删除黑名单
+$tim->sms->black('101')->delete(['103', 104]);
+$tim->sms->black('101')->delete('105');
+
+// 添加分组
+$tim->sms->group('101')->add(['group1', 'group2']);
+$tim->sms->group('101')->add('group3');
+
+// 删除分组
+$tim->sms->group('101')->get();
+$tim->sms->group('101')->get(['group1', 'group2']);
+$tim->sms->group('101')->get('group3', true);
+
+// 拉取分组
+$tim->sms->group('101')->delete(['group1', 'group2']);
+$tim->sms->group('101')->delete('group3');
+```
+
 最近联系人
+
+```php
+// 拉取会话列表
+$tim->contact->getList('101');
+
+// 删除单个C2C会话
+$tim->contact->deleteC2C('101', '102');
+
+// 删除单个G2C会话
+$tim->contact->deleteG2C('101', '@#123456');
+```
 
 群组管理
 
 全局禁言管理
 
+```php
+// 设置全局禁言
+$tim->overall->setNoSpeaking('101', 86400, 86400);
+
+// 查询全局禁言
+$tim->overall->getNoSpeaking('101');
+```
+
 运营管理
+
+```php
+// 拉取运营数据
+$tim->operate->getAppInfo();
+
+$tim->operate->getAppInfo([
+    OperateField::APP_NAME,
+    OperateField::APP_ID,
+    OperateField::COMPANY,
+    // ...
+]);
+
+// 下载最近消息记录
+$tim->operate->getHistory(date('YmdH', time() - 86400));
+
+// 获取服务器 IP 地址
+$tim->operate->getIPList();
+```
 
 ## License
 
