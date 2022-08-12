@@ -18,8 +18,6 @@ use GuzzleHttp\Exception\GuzzleException;
 class Friend extends AbstractService
 {
     /**
-     * Friend constructor.
-     *
      * @param Tim $app
      * @param string $fromAccount
      */

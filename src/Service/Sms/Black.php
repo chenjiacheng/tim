@@ -16,8 +16,6 @@ use GuzzleHttp\Exception\GuzzleException;
 class Black extends AbstractService
 {
     /**
-     * Black constructor.
-     *
      * @param Tim $app
      * @param string $fromAccount
      */

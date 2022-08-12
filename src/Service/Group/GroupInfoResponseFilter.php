@@ -7,8 +7,6 @@ namespace Chenjiacheng\Tim\Service\Group;
 class GroupInfoResponseFilter
 {
     /**
-     * GroupInfoResponseFilter constructor.
-     *
      * @param array $groupBaseInfoFilter 基础信息字段过滤器，指定需要获取的基础信息字段
      * @param array $memberInfoFilter 成员信息字段过滤器，指定需要获取的成员信息字段
      * @param array $appDefinedDataFilterGroup 该字段用来群组维度的自定义字段过滤器，指定需要获取的群组维度的自定义字段

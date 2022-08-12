@@ -168,5 +168,4 @@ class OperateField
      * 日期
      */
     const DATE = 'Date';
-
 }

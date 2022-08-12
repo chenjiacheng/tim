@@ -33,5 +33,4 @@ class FriendTag
      * integer 加好友的时间戳
      */
     const ADD_TIME = 'Tag_SNS_IM_AddTime';
-
 }

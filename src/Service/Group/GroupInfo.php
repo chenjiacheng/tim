@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Chenjiacheng\Tim\Service\Group;
 
-use Chenjiacheng\Tim\Constant\GroupApplyJoinOption;
-
 class GroupInfo
 {
     /**

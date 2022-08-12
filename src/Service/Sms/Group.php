@@ -14,8 +14,6 @@ use GuzzleHttp\Exception\GuzzleException;
 class Group extends AbstractService
 {
     /**
-     * Group constructor.
-     *
      * @param Tim $app
      * @param string $fromAccount
      */
@@ -92,6 +90,4 @@ class Group extends AbstractService
                 'NeedFriend' => $needFriend ? 'Need_Friend_Type_Yes' : '',
             ])));
     }
-
-
 }

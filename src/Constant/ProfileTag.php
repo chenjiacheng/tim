@@ -74,5 +74,4 @@ class ProfileTag
      * uint32 角色
      */
     const ROLE = 'Tag_Profile_IM_Role';
-
 }

@@ -7,8 +7,6 @@ namespace Chenjiacheng\Tim\Service\Group;
 class JoinedGroupResponseFilter
 {
     /**
-     * GroupMemberResponseFilter constructor.
-     *
      * @param array $groupBaseInfoFilter 需要拉取哪些基础信息字段
      * @param array $selfInfoFilter 需要拉取用户在每个群组中的哪些个人资料
      */

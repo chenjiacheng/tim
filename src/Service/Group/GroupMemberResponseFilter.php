@@ -7,8 +7,6 @@ namespace Chenjiacheng\Tim\Service\Group;
 class GroupMemberResponseFilter
 {
     /**
-     * GroupMemberResponseFilter constructor.
-     *
      * @param array $memberInfoFilter 需要获取哪些信息， 如果没有该字段则为群成员全部资料
      * @param array $memberRoleFilter 拉取指定身份的群成员资料。如没有填写该字段，默认为所有身份成员资料，成员身份可以为：“Owner”，“Admin”，“Member”
      * @param array $appDefinedDataFilterGroupMember 默认情况是没有的。该字段用来群成员维度的自定义字段过滤器，指定需要获取的群成员维度的自定义字段
