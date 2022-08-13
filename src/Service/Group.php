@@ -9,6 +9,7 @@ use Chenjiacheng\Tim\Exception\InvalidConfigException;
 use Chenjiacheng\Tim\Service\Group\GroupInfo;
 use Chenjiacheng\Tim\Service\Group\GroupInfoResponseFilter;
 use Chenjiacheng\Tim\Service\Group\GroupMemberResponseFilter;
+use Chenjiacheng\Tim\Service\Group\GroupMsgList;
 use Chenjiacheng\Tim\Service\Group\JoinedGroupResponseFilter;
 use Chenjiacheng\Tim\Service\Message\OfflinePushInfo;
 use Chenjiacheng\Tim\Support\Arr;
@@ -653,24 +654,26 @@ class Group extends AbstractService
      * @see https://cloud.tencent.com/document/product/269/1635
      *
      * @param string $groupId 要导入消息的群 ID
-     * @param array $msgList 导入的消息列表
+     * @param GroupMsgList $groupMsgList 导入的消息列表
      * @param bool $recentContactFlag 是否会话更新识别
+     * @param string $topicId 话题的 ID, 仅支持话题的社群适用此选项
      *
      * @return Collection
      *
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function importMsg(string $groupId, array $msgList, bool $recentContactFlag = false): Collection
+    public function importMsg(string $groupId, GroupMsgList $groupMsgList,
+                              bool $recentContactFlag = false, string $topicId = ''): Collection
     {
-        // TODO MsgList 优化
         return $this->httpPostJson(
             'v4/group_open_http_svc/import_group_msg',
             array_merge([
                 'GroupId' => $groupId,
-                'MsgList' => $msgList,
+                'MsgList' => $groupMsgList->getMsgList(),
             ], array_filter([
                 'RecentContactFlag' => $recentContactFlag ? 1 : 0,
+                'TopicId'           => $topicId,
             ])));
     }
 

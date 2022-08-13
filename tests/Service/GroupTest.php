@@ -12,6 +12,8 @@ use Chenjiacheng\Tim\Constant\GroupType;
 use Chenjiacheng\Tim\Service\Group\GroupInfo;
 use Chenjiacheng\Tim\Service\Group\GroupInfoResponseFilter;
 use Chenjiacheng\Tim\Service\Group\GroupMemberResponseFilter;
+use Chenjiacheng\Tim\Service\Group\GroupMsgItem;
+use Chenjiacheng\Tim\Service\Group\GroupMsgList;
 use Chenjiacheng\Tim\Service\Message\OfflinePushInfo;
 use Chenjiacheng\Tim\Tests\TimTest;
 use Chenjiacheng\Tim\Tim;
@@ -360,6 +362,21 @@ class GroupTest extends TimTest
         $this->assertSame('OK', $result['ActionStatus']);
 
         $result = $tim->group->import('group14', GroupType::CHAT_ROOM, 101, '@100002', time(), new GroupInfo('简介', '公告'));
+        $this->assertSame('OK', $result['ActionStatus']);
+    }
+
+    /**
+     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testImportMsg()
+    {
+        $tim = new Tim($this->config);
+
+        $result = $tim->group->importMsg('@100001', new GroupMsgList(
+            (new GroupMsgItem('101', time() - 86400))->setTIMTextElem('hello'),
+            (new GroupMsgItem('101', time() - 86400))->setTIMLocationElem('深圳', 114.05, 22.55),
+        ));
         $this->assertSame('OK', $result['ActionStatus']);
     }
 

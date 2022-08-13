@@ -7,8 +7,6 @@ namespace Chenjiacheng\Tim\Service\Group;
 class GroupInfo
 {
     /**
-     * GroupInfo constructor.
-     *
      * @param string $introduction 群简介，最长240字节
      * @param string $notification 群公告，最长300字节
      * @param string $faceUrl 群头像 URL，最长100字节
