@@ -16,6 +16,7 @@ use Chenjiacheng\Tim\Service\Group\GroupMemberList;
 use Chenjiacheng\Tim\Service\Group\GroupMemberResponseFilter;
 use Chenjiacheng\Tim\Service\Group\GroupMsgItem;
 use Chenjiacheng\Tim\Service\Group\GroupMsgList;
+use Chenjiacheng\Tim\Service\Group\TopicInfo;
 use Chenjiacheng\Tim\Service\Message\OfflinePushInfo;
 use Chenjiacheng\Tim\Tests\TimTest;
 use Chenjiacheng\Tim\Tim;
@@ -54,7 +55,7 @@ class GroupTest extends TimTest
         $result = $tim->group->create('group3', GroupType::CHAT_ROOM, '101');
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->group->create('group4', GroupType::CHAT_ROOM, 101, '@100001',
+        $result = $tim->group->create('group4', GroupType::COMMUNITY, 101, '@100001',
             [
                 [
                     'Member_Account' => $this->config['identifier'],
@@ -470,6 +471,72 @@ class GroupTest extends TimTest
      * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
+    public function testGetAttr()
+    {
+        $tim = new Tim($this->config);
+
+        $result = $tim->group->getAttr('@100001');
+        $this->assertSame('OK', $result['ActionStatus']);
+    }
+
+    /**
+     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testModifyAttr()
+    {
+        $tim = new Tim($this->config);
+
+        $result = $tim->group->modifyAttr('@100001', [
+            'attr_key1' => 'attr_val1',
+            'attr_key2' => 'attr_val2',
+        ]);
+        $this->assertSame('OK', $result['ActionStatus']);
+    }
+
+    /**
+     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testClearAttr()
+    {
+        $tim = new Tim($this->config);
+
+        $result = $tim->group->clearAttr('@100001');
+        $this->assertSame('OK', $result['ActionStatus']);
+    }
+
+    /**
+     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testSetAttr()
+    {
+        $tim = new Tim($this->config);
+
+        $result = $tim->group->setAttr('@100001', [
+            'attr_key1' => 'attr_val1',
+            'attr_key2' => 'attr_val2',
+        ]);
+        $this->assertSame('OK', $result['ActionStatus']);
+    }
+
+    /**
+     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testModifyMsg()
+    {
+        $tim = new Tim($this->config);
+
+        $result = $tim->group->setTIMTextElem('hello')->modifyMsg('@100001', 23);
+        $this->assertSame('OK', $result['ActionStatus']);
+    }
+
+    /**
+     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function testGetGroupMsgReceiptDetail()
     {
         $tim = new Tim($this->config);
@@ -494,6 +561,18 @@ class GroupTest extends TimTest
      * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
+    public function testSendBroadcastMsg()
+    {
+        $tim = new Tim($this->config);
+
+        $result = $tim->group->setTIMTextElem('hello')->sendBroadcastMsg('101');
+        $this->assertSame('OK', $result['ActionStatus']);
+    }
+
+    /**
+     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function testDestroy()
     {
         $tim = new Tim($this->config);
@@ -503,5 +582,80 @@ class GroupTest extends TimTest
             $result = $tim->group->destroy($item['GroupId']);
             $this->assertSame('OK', $result['ActionStatus']);
         }
+    }
+
+    /**
+     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testCreateTopic()
+    {
+        $tim = new Tim($this->config);
+
+        $result = $tim->group->createTopic('@100001', 'topic1');
+        $this->assertSame('OK', $result['ActionStatus']);
+
+        $result = $tim->group->createTopic('@100001', 'topic2',
+            '@TGS#_@TGS#cQVLVHIM62CJ@TOPIC#_TestTopic',
+            '101', 'This is a custom string',
+            new TopicInfo('http://this.is.face.url',
+                'This is topic Notification',
+                'This is topic Introduction', [
+                    'TopicTestData1' => 'xxxxx',
+                    'TopicTestData2' => 'abc\u0000\u0001'
+                ]));
+        $this->assertSame('OK', $result['ActionStatus']);
+    }
+
+    /**
+     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testDestroyTopic()
+    {
+        $tim = new Tim($this->config);
+
+        $result = $tim->group->destroyTopic('@100001', ['aaa', 'bbb']);
+        $this->assertSame('OK', $result['ActionStatus']);
+
+        $result = $tim->group->destroyTopic('@100001', 'ccc');
+        $this->assertSame('OK', $result['ActionStatus']);
+    }
+
+    /**
+     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testGetTopic()
+    {
+        $tim = new Tim($this->config);
+
+        $result = $tim->group->getTopic('@100001', '101');
+        $this->assertSame('OK', $result['ActionStatus']);
+
+        $result = $tim->group->getTopic('@100001', '101', ['aaa', 'bbb']);
+        $this->assertSame('OK', $result['ActionStatus']);
+    }
+
+    /**
+     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testModifyTopic()
+    {
+        $tim = new Tim($this->config);
+
+        $result = $tim->group->modifyTopic('@100001', '@TGS#_@TGS#cQVLVHIM62CJ@TOPIC#_TestTopic', 'topicName');
+        $this->assertSame('OK', $result['ActionStatus']);
+
+        $result = $tim->group->modifyTopic('@100001', '@TGS#_@TGS#cQVLVHIM62CJ@TOPIC#_TestTopic', 'topicName',
+            '101', 'This is a custom string', true,
+            new TopicInfo('http://this.is.face.url',
+                'This is topic Notification',
+                'This is topic Introduction', [
+                    'TopicTestData1' => 'xxxxx',
+                    'TopicTestData2' => 'abc\u0000\u0001'
+                ]));
+        $this->assertSame('OK', $result['ActionStatus']);
     }
 }

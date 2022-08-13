@@ -591,32 +591,78 @@ $tim->group->importMember('@100001', new GroupMemberList(
 $tim->group->setUnreadMsgNum('@100001', '101', 10);
 
 // 删除指定用户发送的消息
-
+$tim->group->deleteMsgBySender('@100001', '101');
 
 // 拉取群历史消息
-
+$tim->group->getHistory('@100001');
+$tim->group->getHistory('@100001', 10);
 
 // 获取直播群在线人数
+$tim->group->getOnlineMemberNum('@100001');
 
+// 获取直播群在线成员列表
+$tim->group->getMembers('@100001');
 
 // 获取群自定义属性
-
+$tim->group->getAttr('@100001');
 
 // 修改群自定义属性
-
+$tim->group->modifyAttr('@100001', [
+    'attr_key1' => 'attr_val1',
+    'attr_key2' => 'attr_val2',
+]);
 
 // 清空群自定义属性
-
+$tim->group->clearAttr('@100001');
 
 // 重置群自定义属性
-
+$tim->group->setAttr('@100001', [
+    'attr_key1' => 'attr_val1',
+    'attr_key2' => 'attr_val2',
+]);
 
 // 修改群聊历史消息
+$tim->group->setTIMTextElem('hello')->modifyMsg('@100001', 10000);
 
+//拉取群消息已读回执详情
+$tim->group->getGroupMsgReceiptDetail('@100001');
+
+//拉取群消息已读回执信息
+$tim->group->getGroupMsgReceipt('@100001', [1, 2, 3]);
 
 // 直播群广播消息
+$tim->group->setTIMTextElem('hello')->sendBroadcastMsg('101');
 
+// 创建话题
+$tim->group->createTopic('@100001', 'topic1');
+$tim->group->createTopic('@100001', 'topic2',
+    '@TGS#_@TGS#cQVLVHIM62CJ@TOPIC#_TestTopic',
+    '101', 'This is a custom string',
+    new TopicInfo('http://this.is.face.url',
+        'This is topic Notification',
+        'This is topic Introduction', [
+            'TopicTestData1' => 'xxxxx',
+            'TopicTestData2' => 'abc\u0000\u0001'
+        ]));
 
+// 解散话题
+$tim->group->destroyTopic('@100001', ['aaa', 'bbb']);
+$tim->group->destroyTopic('@100001', 'ccc');
+
+// 获取话题资料
+$tim->group->getTopic('@100001', '101');
+$tim->group->getTopic('@100001', '101', ['aaa', 'bbb']);
+
+// 修改话题资料
+$tim->group->modifyTopic('@100001', '@TGS#_@TGS#cQVLVHIM62CJ@TOPIC#_TestTopic', 'topicName');
+$tim->group->modifyTopic('@100001', '@TGS#_@TGS#cQVLVHIM62CJ@TOPIC#_TestTopic', 'topicName',
+    '101', 'This is a custom string', true,
+    new TopicInfo('http://this.is.face.url',
+        'This is topic Notification',
+        'This is topic Introduction', [
+            'TopicTestData1' => 'xxxxx',
+            'TopicTestData2' => 'abc\u0000\u0001'
+        ]));
 ```
 
 全局禁言管理

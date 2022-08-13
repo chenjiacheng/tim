@@ -12,6 +12,7 @@ use Chenjiacheng\Tim\Service\Group\GroupMemberList;
 use Chenjiacheng\Tim\Service\Group\GroupMemberResponseFilter;
 use Chenjiacheng\Tim\Service\Group\GroupMsgList;
 use Chenjiacheng\Tim\Service\Group\JoinedGroupResponseFilter;
+use Chenjiacheng\Tim\Service\Group\TopicInfo;
 use Chenjiacheng\Tim\Service\Message\OfflinePushInfo;
 use Chenjiacheng\Tim\Support\Arr;
 use Chenjiacheng\Tim\Support\Collection;
@@ -98,8 +99,9 @@ class Group extends AbstractService
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function create(string $name, string $type = GroupType::PUBLIC, string|int $ownerAccount = '',
-                           string $groupId = '', array $memberList = [], GroupInfo $groupInfo = null): Collection
+    public function create(string $name, string $type = GroupType::PUBLIC,
+                           string|int $ownerAccount = '', string $groupId = '',
+                           array $memberList = [], GroupInfo $groupInfo = null): Collection
     {
         return $this->httpPostJson(
             'v4/group_open_http_svc/create_group',
@@ -861,7 +863,9 @@ class Group extends AbstractService
             'v4/group_open_http_svc/modify_group_attr',
             [
                 'GroupId'   => $groupId,
-                'GroupAttr' => $groupAttr,
+                'GroupAttr' => array_map(function ($value, $key) {
+                    return ['key' => $key, 'value' => $value];
+                }, $groupAttr, array_keys($groupAttr))
             ]);
     }
 
@@ -871,6 +875,7 @@ class Group extends AbstractService
      * @see https://cloud.tencent.com/document/product/269/67009
      *
      * @param string $groupId 清空自定义属性的群 id
+     *
      * @return Collection
      *
      * @throws InvalidConfigException
@@ -904,7 +909,9 @@ class Group extends AbstractService
             'v4/group_open_http_svc/set_group_attr',
             [
                 'GroupId'   => $groupId,
-                'GroupAttr' => $groupAttr,
+                'GroupAttr' => array_map(function ($value, $key) {
+                    return ['key' => $key, 'value' => $value];
+                }, $groupAttr, array_keys($groupAttr))
             ]);
     }
 
@@ -914,16 +921,17 @@ class Group extends AbstractService
      *
      * @see https://cloud.tencent.com/document/product/269/74741
      *
-     * @param string $groupId
-     * @param int $msgSeq
+     * @param string $groupId 操作的群 ID
+     * @param int $msgSeq 请求修改的消息 seq
+     * @param string $topicId 话题的 ID, 仅支持话题的社群适用此选项
+     *
      * @return Collection
      *
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function modifyMsg(string $groupId, int $msgSeq): Collection
+    public function modifyMsg(string $groupId, int $msgSeq, string $topicId = ''): Collection
     {
-        // TODO
         return $this->httpPostJson(
             'v4/openim/modify_group_msg',
             array_merge([
@@ -931,6 +939,7 @@ class Group extends AbstractService
                 'MsgSeq'  => $msgSeq,
             ], array_filter([
                 'MsgBody' => $this->msgBody,
+                'TopicId' => $topicId,
             ])));
     }
 
@@ -1006,7 +1015,6 @@ class Group extends AbstractService
      */
     public function sendBroadcastMsg(string|int $fromAccount = ''): Collection
     {
-        // TODO
         return $this->httpPostJson(
             'v4/group_open_http_svc/send_broadcast_msg',
             array_merge([
@@ -1015,5 +1023,132 @@ class Group extends AbstractService
             ], array_filter([
                 'From_Account' => (string)$fromAccount,
             ])));
+    }
+
+    /**
+     * 创建话题
+     *
+     * @see https://cloud.tencent.com/document/product/269/78203
+     *
+     * @param string $groupId 需要创建的话题所属的群组ID
+     * @param string $topicName 话题名称，最长30字节，使用 UTF-8 编码，1个汉字占3个字节
+     * @param string $topicId 自定义话题 ID
+     * @param string|int $fromAccount 表示需要创建话题的用户帐号
+     * @param string $customString 自定义字符串，最长3000个字节，使用 UTF-8 编码，1个汉字占3个字节
+     * @param TopicInfo|null $topicInfo 话题信息
+     *
+     * @return Collection
+     *
+     * @throws InvalidConfigException
+     * @throws GuzzleException
+     */
+    public function createTopic(string $groupId, string $topicName, string $topicId = '',
+                                string|int $fromAccount = '', string $customString = '',
+                                TopicInfo $topicInfo = null): Collection
+    {
+        return $this->httpPostJson(
+            'v4/million_group_open_http_svc/create_topic',
+            array_merge([
+                'GroupId'   => $groupId,
+                'TopicName' => $topicName,
+            ], array_filter([
+                'TopicId'      => $topicId,
+                'From_Account' => (string)$fromAccount,
+                'CustomString' => $customString,
+            ]), array_filter(
+                isset($topicInfo) ? $topicInfo->output() : []
+            )));
+    }
+
+    /**
+     * 解散话题
+     *
+     * @see https://cloud.tencent.com/document/product/269/78202
+     *
+     * @param string $groupId 需要解散话题所属的群组ID
+     * @param array|string $topicIdList 表示需要解散的话题列表，可以有多个
+     *
+     * @return Collection
+     *
+     * @throws InvalidConfigException
+     * @throws GuzzleException
+     */
+    public function destroyTopic(string $groupId, array|string $topicIdList): Collection
+    {
+        return $this->httpPostJson(
+            'v4/million_group_open_http_svc/destroy_topic',
+            [
+                'GroupId'     => $groupId,
+                'TopicIdList' => Arr::wrap($topicIdList),
+            ]);
+    }
+
+    /**
+     * 获取话题资料
+     *
+     * @see https://cloud.tencent.com/document/product/269/78204
+     *
+     * @param string $groupId 需要获取话题所在的群组 ID
+     * @param string|int $fromAccount 获取指定用户在话题中的信息
+     * @param array|string|null $topicIdList 需要获取的话题列表，若不填，则获取群组下所有的话题信息
+     * @param array $responseFilter 返回信息的过滤器，指定需要获取的话题信息
+     * @param array $topicDefinedData 话题维度的自定义信息
+     *
+     * @return Collection
+     *
+     * @throws InvalidConfigException
+     * @throws GuzzleException
+     */
+    public function getTopic(string $groupId, string|int $fromAccount, array|string $topicIdList = null,
+                             array $responseFilter = [], array $topicDefinedData = []): Collection
+    {
+        return $this->httpPostJson(
+            'v4/million_group_open_http_svc/get_topic',
+            array_merge([
+                'GroupId'      => $groupId,
+                'From_Account' => (string)$fromAccount,
+            ], array_filter([
+                'TopicIdList'      => Arr::wrap($topicIdList),
+                'ResponseFilter'   => $responseFilter,
+                'TopicDefinedData' => $topicDefinedData,
+            ])));
+    }
+
+    /**
+     * 修改话题资料
+     *
+     * @see https://cloud.tencent.com/document/product/269/78205
+     *
+     * @param string $groupId 需要修改的话题所属的群组 ID
+     * @param string $topicId 需要修改的话题 ID
+     * @param string $topicName 话题名称，最长30字节，使用 UTF-8 编码，1个汉字占3个字节
+     * @param string|int $fromAccount 表示需要修改话题的用户帐号
+     * @param string $customString 自定义字符串，最长3000个字节，使用 UTF-8 编码，1个汉字占3个字节
+     * @param bool $muteAllMember 话题内成员禁言，只有群管理员和群主以及系统管理员可以发言
+     * @param TopicInfo|null $topicInfo 话题信息
+     *
+     * @return Collection
+     *
+     * @throws InvalidConfigException
+     * @throws GuzzleException
+     */
+    public function modifyTopic(string $groupId, string $topicId, string $topicName = '',
+                                string|int $fromAccount = '', string $customString = '',
+                                bool $muteAllMember = false, TopicInfo $topicInfo = null): Collection
+    {
+        return $this->httpPostJson(
+            'v4/million_group_open_http_svc/modify_topic',
+            array_merge([
+                'GroupId' => $groupId,
+                'TopicId' => $topicId,
+
+            ], array_filter([
+                'TopicName'     => $topicName,
+                'From_Account'  => (string)$fromAccount,
+                'CustomString'  => $customString,
+                'muteAllMember' => $muteAllMember ? 'On' : '',
+            ]), array_filter(
+                isset($topicInfo) ? $topicInfo->output() : []
+            )));
     }
 }
