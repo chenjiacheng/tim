@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Chenjiacheng\Tim\Service;
 
 use Chenjiacheng\Tim\Exception\InvalidConfigException;
+use Chenjiacheng\Tim\Service\Message\OfflinePushInfo;
 use Chenjiacheng\Tim\Support\Arr;
 use Chenjiacheng\Tim\Support\Collection;
 use Chenjiacheng\Tim\Traits\TIMMsgTrait;
@@ -57,14 +58,16 @@ class Message extends AbstractService
      * @param bool $syncOtherMachine true：把消息同步到 From_Account 在线终端和漫游上（默认）；false：消息不同步至 From_Account；
      * @param int $msgLifeTime 消息离线保存时长（单位：秒），最长并默认为7天（604800秒）若设置该字段为0，则消息只发在线用户，不保存离线
      * @param int|null $msgSeq 消息序列号，后台会根据该字段去重及进行同秒内消息的排序，若不填该字段，则由后台填入随机数
+     * @param bool $isNeedReadReceipt 该条消息是否需要已读回执
      *
      * @return Collection
      *
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function sendMsg(string|int $toAccount, string|int $fromAccount = null, bool $syncOtherMachine = true,
-                            int $msgLifeTime = 604800, int $msgSeq = null): Collection
+    public function sendMsg(string|int $toAccount, string|int $fromAccount = null,
+                            bool $syncOtherMachine = true, int $msgLifeTime = 604800,
+                            int $msgSeq = null, bool $isNeedReadReceipt = false): Collection
     {
         return $this->httpPostJson(
             'v4/openim/sendmsg',
@@ -81,6 +84,7 @@ class Message extends AbstractService
                 'SendMsgControl'        => $this->sendMsgControl,
                 'CloudCustomData'       => $this->cloudCustomData,
                 'OfflinePushInfo'       => $this->offlinePushInfo,
+                'IsNeedReadReceipt'     => $isNeedReadReceipt ? 1 : 0,
             ])));
     }
 
@@ -94,13 +98,16 @@ class Message extends AbstractService
      * @param bool $syncOtherMachine true：把消息同步到 From_Account 在线终端和漫游上（默认）；false：消息不同步至 From_Account；
      * @param int $msgLifeTime 消息离线保存时长（单位：秒），最长并默认为7天（604800秒）若设置该字段为0，则消息只发在线用户，不保存离线
      * @param int|null $msgSeq 消息序列号，后台会根据该字段去重及进行同秒内消息的排序，若不填该字段，则由后台填入随机数
+     * @param bool $isNeedReadReceipt 该条消息是否需要已读回执
      *
      * @return Collection
+     *
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function batchSendMsg(array $toAccount, string|int $fromAccount = null, bool $syncOtherMachine = true,
-                                 int $msgLifeTime = 604800, int $msgSeq = null): Collection
+    public function batchSendMsg(array $toAccount, string|int $fromAccount = null,
+                                 bool $syncOtherMachine = true, int $msgLifeTime = 604800,
+                                 int $msgSeq = null, bool $isNeedReadReceipt = false): Collection
     {
         return $this->httpPostJson(
             'v4/openim/batchsendmsg',
@@ -117,6 +124,7 @@ class Message extends AbstractService
                 'SendMsgControl'        => $this->sendMsgControl,
                 'CloudCustomData'       => $this->cloudCustomData,
                 'OfflinePushInfo'       => $this->offlinePushInfo,
+                'IsNeedReadReceipt'     => $isNeedReadReceipt ? 1 : 0,
             ])));
     }
 
@@ -131,8 +139,8 @@ class Message extends AbstractService
      * @param bool $syncFromOldSystem true：表示实时消息导入，消息计入未读计数，false：表示历史消息导入，消息不计入未读
      * @param int|null $msgSeq 消息序列号，后台会根据该字段去重及进行同秒内消息的排序，若不填该字段，则由后台填入随机数
      * @return Collection
-     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function importMsg(string|int $fromAccount, string|int $toAccount, int $msgTimeStamp = null,
                               bool $syncFromOldSystem = true, int $msgSeq = null): Collection
@@ -356,13 +364,13 @@ class Message extends AbstractService
     }
 
     /**
-     * @param array $offlinePushInfo 离线推送信息配置
+     * @param OfflinePushInfo $offlinePushInfo 离线推送信息配置
      *
      * @return $this
      */
-    public function setOfflinePushInfo(array $offlinePushInfo): static
+    public function setOfflinePushInfo(OfflinePushInfo $offlinePushInfo): static
     {
-        $this->offlinePushInfo = $offlinePushInfo;
+        $this->offlinePushInfo = array_filter($offlinePushInfo->output());
         return $this;
     }
 }

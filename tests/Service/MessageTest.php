@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chenjiacheng\Tim\Tests\Service;
 
+use Chenjiacheng\Tim\Service\Message\OfflinePushInfo;
 use Chenjiacheng\Tim\Tests\TimTest;
 use Chenjiacheng\Tim\Tim;
 
@@ -29,7 +30,7 @@ class MessageTest extends TimTest
             ->noUnread(true)
             ->noLastMsg(true)
             ->withMuteNotifications(true)
-            ->setOfflinePushInfo([])
+            ->setOfflinePushInfo(new OfflinePushInfo(0, '这是推送标题', '这是离线推送内容', '这是透传的内容'))
             ->sendMsg(101, '102', false, 86400);
         $this->assertSame('OK', $result['ActionStatus']);
     }
@@ -52,8 +53,8 @@ class MessageTest extends TimTest
             ->noUnread(true)
             ->noLastMsg(true)
             ->withMuteNotifications(true)
-            ->setOfflinePushInfo([])
-            ->batchSendMsg(['101', 102], '102', false, 86400);
+            ->setOfflinePushInfo(new OfflinePushInfo(0, '这是推送标题', '这是离线推送内容', '这是透传的内容'))
+            ->batchSendMsg(['101', 103], '102', false, 86400);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -75,7 +76,7 @@ class MessageTest extends TimTest
             ->noUnread(true)
             ->noLastMsg(true)
             ->withMuteNotifications(true)
-            ->setOfflinePushInfo([])
+            ->setOfflinePushInfo(new OfflinePushInfo(0, '这是推送标题', '这是离线推送内容', '这是透传的内容'))
             ->importMsg('101', 102, time(), false);
         $this->assertSame('OK', $result['ActionStatus']);
     }
