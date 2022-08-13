@@ -62,24 +62,21 @@ class Account extends AbstractService
      *
      * @see https://cloud.tencent.com/document/product/269/36443
      *
-     * @param array|string|int $accounts 请求删除的帐号的 UserID 数组，单次请求最多支持100个帐号
+     * @param array|string|int $deleteItem 请求删除的帐号的 UserID 数组，单次请求最多支持100个帐号
      *
      * @return Collection
      *
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function delete(array|string|int $accounts): Collection
+    public function delete(array|string|int $deleteItem): Collection
     {
-        $deleteItem = [];
-        foreach (Arr::wrap($accounts) as $account) {
-            $deleteItem[] = ['UserID' => (string)$account];
-        }
-
         return $this->httpPostJson(
             'v4/im_open_login_svc/account_delete',
             [
-                'DeleteItem' => $deleteItem,
+                'DeleteItem' => array_map(function ($userId) {
+                    return ['UserID' => (string)$userId];
+                }, Arr::wrap($deleteItem))
             ]);
     }
 
@@ -88,24 +85,21 @@ class Account extends AbstractService
      *
      * @see https://cloud.tencent.com/document/product/269/38417
      *
-     * @param array|string|int $accounts 请求检查的帐号的 UserID 数组，单次请求最多支持100个帐号
+     * @param array|string|int $checkItem 请求检查的帐号的 UserID 数组，单次请求最多支持100个帐号
      *
      * @return Collection
      *
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function check(array|string|int $accounts): Collection
+    public function check(array|string|int $checkItem): Collection
     {
-        $checkItem = [];
-        foreach (Arr::wrap($accounts) as $account) {
-            $checkItem[] = ['UserID' => (string)$account];
-        }
-
         return $this->httpPostJson(
             'v4/im_open_login_svc/account_check',
             [
-                'CheckItem' => $checkItem
+                'CheckItem' => array_map(function ($userId) {
+                    return ['UserID' => (string)$userId];
+                }, Arr::wrap($checkItem))
             ]);
     }
 
@@ -114,19 +108,19 @@ class Account extends AbstractService
      *
      * @see https://cloud.tencent.com/document/product/269/3853
      *
-     * @param string|int $account 用户名
+     * @param string|int $userId 用户名
      *
      * @return Collection
      *
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function kick(string|int $account): Collection
+    public function kick(string|int $userId): Collection
     {
         return $this->httpPostJson(
             'v4/im_open_login_svc/kick',
             [
-                'UserID' => (string)$account,
+                'UserID' => (string)$userId,
             ]);
     }
 
