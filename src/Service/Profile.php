@@ -17,25 +17,22 @@ class Profile extends AbstractService
      * @see https://cloud.tencent.com/document/product/269/1640
      *
      * @param string|int $fromAccount 需要设置该 UserID 的资料
-     * @param array $profileTags 待设置的用户的资料
+     * @param array $profileItem 待设置的用户的资料
      *
      * @return Collection
      *
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function set(string|int $fromAccount, array $profileTags): Collection
+    public function set(string|int $fromAccount, array $profileItem): Collection
     {
-        $profileItem = [];
-        foreach ($profileTags as $tag => $value) {
-            $profileItem[] = ['Tag' => $tag, 'Value' => $value];
-        }
-
         return $this->httpPostJson(
             'v4/profile/portrait_set',
             [
                 'From_Account' => (string)$fromAccount,
-                'ProfileItem'  => $profileItem,
+                'ProfileItem'  => array_map(function ($value, $tag) {
+                    return ['Tag' => $tag, 'Value' => $value];
+                }, $profileItem, array_keys($profileItem)),
             ]);
     }
 
