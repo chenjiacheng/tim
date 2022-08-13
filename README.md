@@ -50,10 +50,103 @@ $tim->account->kick('101');
 
 // 查询帐号在线状态
 $tim->account->queryStatus(['101', '102']);
-$tim->account->queryStatus('101');
+$tim->account->queryStatus('101', true);
 ```
 
 单聊消息
+
+```php
+// 单发单聊消息
+$tim->message->setTIMTextElem('你好')->sendMsg('101'); // 发送文本消息
+$tim->message->setTIMLocationElem('someinfo', 29.340656774469956, 116.77497920478824)->sendMsg('101'); // 发送地理位置消息
+// 其他参数
+$tim->message
+    ->setTIMTextElem('在吗') // 设置文本消息
+    ->setTIMLocationElem('someinfo', 29.340656774469956, 116.77497920478824) // 设置地理位置消息
+    ->setTIMFaceElem(1, 'content') // 设置表情消息
+    ->setTIMCustomElem('message', 'notification', 'url', 'dingdong.aiff') // 设置自定义消息
+    ->setTIMSoundElem('sound_url') // 设置语音消息
+    ->setTIMImageElem('image_url') // 设置图像消息
+    ->setTIMFileElem('file_url') // 设置文件消息
+    ->setTIMVideoFileElem('video_url', 'thumb_url') // 设置视频消息
+    ->setCloudCustomData('云端保存消息') // 消息自定义数据（云端保存，会发送到对端，程序卸载重装后还能拉取到）
+    ->beforeCallback(false) // 表示禁止发消息前回调
+    ->afterCallback(false) // 表示禁止发消息后回调
+    ->noUnread(true) // 表示该条消息不计入未读数
+    ->noLastMsg(true) // 表示该条消息不更新会话列表
+    ->withMuteNotifications(true) // 表示该条消息的接收方对发送方设置的免打扰选项生效（默认不生效）
+    ->setOfflinePushInfo(new OfflinePushInfo(0, '这是推送标题', '这是离线推送内容', '这是透传的内容')) // 离线推送信息配置
+    ->sendMsg(101, '102', false, 86400);
+
+// 批量发单聊消息
+$tim->message->setTIMTextElem('你好')->batchSendMsg(['101', '102']); // 批量发送文本消息
+$tim->message->setTIMLocationElem('someinfo', 29.340656774469956, 116.77497920478824)->batchSendMsg(['101', '102']); // 批量发送地理位置消息
+// 其他参数
+$tim->message
+    ->setTIMTextElem('在吗') // 设置文本消息
+    ->setTIMLocationElem('someinfo', 29.340656774469956, 116.77497920478824) // 设置地理位置消息
+    ->setTIMFaceElem(1, 'content') // 设置表情消息
+    ->setTIMCustomElem('message', 'notification', 'url', 'dingdong.aiff') // 设置自定义消息
+    ->setTIMSoundElem('sound_url') // 设置语音消息
+    ->setTIMImageElem('image_url') // 设置图像消息
+    ->setTIMFileElem('file_url') // 设置文件消息
+    ->setTIMVideoFileElem('video_url', 'thumb_url') // 设置视频消息
+    ->setCloudCustomData('云端保存消息') // 消息自定义数据（云端保存，会发送到对端，程序卸载重装后还能拉取到）
+    ->noUnread(true) // 表示该条消息不计入未读数
+    ->noLastMsg(true) // 表示该条消息不更新会话列表
+    ->withMuteNotifications(true) // 表示该条消息的接收方对发送方设置的免打扰选项生效（默认不生效）
+    ->setOfflinePushInfo(new OfflinePushInfo(0, '这是推送标题', '这是离线推送内容', '这是透传的内容')) // 离线推送信息配置
+    ->batchSendMsg(['101', 103], '102', false, 86400);
+
+// 导入单聊消息
+$tim->message->setTIMTextElem('你好')->importMsg('101', '102');
+// 其他参数
+$tim->message
+    ->setTIMTextElem('在吗') // 设置文本消息
+    ->setTIMLocationElem('someinfo', 29.340656774469956, 116.77497920478824) // 设置地理位置消息
+    ->setTIMFaceElem(1, 'content') // 设置表情消息
+    ->setTIMCustomElem('message', 'notification', 'url', 'dingdong.aiff') // 设置自定义消息
+    ->setTIMSoundElem('sound_url') // 设置语音消息
+    ->setTIMImageElem('image_url') // 设置图像消息
+    ->setTIMFileElem('file_url') // 设置文件消息
+    ->setTIMVideoFileElem('video_url', 'thumb_url') // 设置视频消息
+    ->setCloudCustomData('云端保存消息') // 消息自定义数据（云端保存，会发送到对端，程序卸载重装后还能拉取到）
+    ->noUnread(true) // 表示该条消息不计入未读数
+    ->noLastMsg(true) // 表示该条消息不更新会话列表
+    ->withMuteNotifications(true) // 表示该条消息的接收方对发送方设置的免打扰选项生效（默认不生效）
+    ->setOfflinePushInfo(new OfflinePushInfo(0, '这是推送标题', '这是离线推送内容', '这是透传的内容')) // 离线推送信息配置
+    ->importMsg('101', 102, time(), false);
+
+// 查询单聊消息
+$tim->message->getRoamMsg('101', 102, 100, time() - 86400, time());
+
+// 撤回单聊消息
+$tim->message->msgWithdraw('101', 102, '31906_833502_1572869830');
+
+// 设置单聊消息已读
+$tim->message->setMsgRead('101', 102);
+
+// 查询单聊未读消息计数
+$tim->message->getUnreadMsgNum('101', [102, '103']);
+$tim->message->getUnreadMsgNum('101', 102);
+
+// 修改单聊历史消息
+$tim->message
+    ->setCloudCustomData('云端保存消息') // 消息自定义数据（云端保存，会发送到对端，程序卸载重装后还能拉取到）
+    ->modifyMsg('101', 102, '31906_833502_1572869830');
+// 其他参数
+$tim->message
+    ->setTIMTextElem('在吗') // 设置文本消息
+    ->setTIMLocationElem('someinfo', 29.340656774469956, 116.77497920478824) // 设置地理位置消息
+    ->setTIMFaceElem(1, 'content') // 设置表情消息
+    ->setTIMCustomElem('message', 'notification', 'url', 'dingdong.aiff') // 设置自定义消息
+    ->setTIMSoundElem('sound_url') // 设置语音消息
+    ->setTIMImageElem('image_url') // 设置图像消息
+    ->setTIMFileElem('file_url') // 设置文件消息
+    ->setTIMVideoFileElem('video_url', 'thumb_url') // 设置视频消息
+    ->setCloudCustomData('云端保存消息') // 消息自定义数据（云端保存，会发送到对端，程序卸载重装后还能拉取到）
+    ->modifyMsg('101', 102, '31906_833502_1572869830');
+```
 
 全员推送
 
