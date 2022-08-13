@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Chenjiacheng\Tim\Service;
 
 use Chenjiacheng\Tim\Exception\InvalidConfigException;
+use Chenjiacheng\Tim\Service\Message\OfflinePushInfo;
 use Chenjiacheng\Tim\Support\Arr;
 use Chenjiacheng\Tim\Support\Collection;
 use Chenjiacheng\Tim\Traits\TIMMsgTrait;
@@ -130,7 +131,9 @@ class Push extends AbstractService
         return $this->httpPostJson(
             'v4/all_member_push/im_set_attr',
             [
-                'UserAttrs' => $userAttrs,
+                'UserAttrs' => array_map(function ($toAccount, $attrs) {
+                    return ['To_Account' => $toAccount, 'Attrs' => $attrs];
+                }, $userAttrs, array_keys($userAttrs))
             ]);
     }
 
@@ -151,7 +154,9 @@ class Push extends AbstractService
         return $this->httpPostJson(
             'v4/all_member_push/im_remove_attr',
             [
-                'UserAttrs' => $userAttrs,
+                'UserAttrs' => array_map(function ($toAccount, $attrs) {
+                    return ['To_Account' => $toAccount, 'Attrs' => $attrs];
+                }, $userAttrs, array_keys($userAttrs))
             ]);
     }
 
@@ -193,7 +198,9 @@ class Push extends AbstractService
         return $this->httpPostJson(
             'v4/all_member_push/im_add_tag',
             [
-                'UserTags' => $userTags,
+                'UserTags' => array_map(function ($toAccount, $tags) {
+                    return ['To_Account' => $toAccount, 'Tags' => $tags];
+                }, $userTags, array_keys($userTags))
             ]);
     }
 
@@ -214,7 +221,9 @@ class Push extends AbstractService
         return $this->httpPostJson(
             'v4/all_member_push/im_remove_tag',
             [
-                'UserTags' => $userTags,
+                'UserTags' => array_map(function ($toAccount, $tags) {
+                    return ['To_Account' => $toAccount, 'Tags' => $tags];
+                }, $userTags, array_keys($userTags))
             ]);
     }
 
@@ -240,13 +249,13 @@ class Push extends AbstractService
     }
 
     /**
-     * @param array $offlinePushInfo 离线推送信息配置
+     * @param OfflinePushInfo $offlinePushInfo 离线推送信息配置
      *
      * @return $this
      */
-    public function setOfflinePushInfo(array $offlinePushInfo): static
+    public function setOfflinePushInfo(OfflinePushInfo $offlinePushInfo): static
     {
-        $this->offlinePushInfo = $offlinePushInfo;
+        $this->offlinePushInfo = array_filter($offlinePushInfo->output());
         return $this;
     }
 

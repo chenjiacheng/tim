@@ -10,6 +10,7 @@ use Chenjiacheng\Tim\Service\Group\GroupInfo;
 use Chenjiacheng\Tim\Service\Group\GroupInfoResponseFilter;
 use Chenjiacheng\Tim\Service\Group\GroupMemberResponseFilter;
 use Chenjiacheng\Tim\Service\Group\JoinedGroupResponseFilter;
+use Chenjiacheng\Tim\Service\Message\OfflinePushInfo;
 use Chenjiacheng\Tim\Support\Arr;
 use Chenjiacheng\Tim\Support\Collection;
 use Chenjiacheng\Tim\Traits\TIMMsgTrait;
@@ -525,13 +526,13 @@ class Group extends AbstractService
     }
 
     /**
-     * @param array $offlinePushInfo 离线推送信息配置
+     * @param OfflinePushInfo $offlinePushInfo 离线推送信息配置
      *
      * @return $this
      */
-    public function setOfflinePushInfo(array $offlinePushInfo): static
+    public function setOfflinePushInfo(OfflinePushInfo $offlinePushInfo): static
     {
-        $this->offlinePushInfo = $offlinePushInfo;
+        $this->offlinePushInfo = array_filter($offlinePushInfo->output());
         return $this;
     }
 

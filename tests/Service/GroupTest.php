@@ -12,6 +12,7 @@ use Chenjiacheng\Tim\Constant\GroupType;
 use Chenjiacheng\Tim\Service\Group\GroupInfo;
 use Chenjiacheng\Tim\Service\Group\GroupInfoResponseFilter;
 use Chenjiacheng\Tim\Service\Group\GroupMemberResponseFilter;
+use Chenjiacheng\Tim\Service\Message\OfflinePushInfo;
 use Chenjiacheng\Tim\Tests\TimTest;
 use Chenjiacheng\Tim\Tim;
 
@@ -291,7 +292,7 @@ class GroupTest extends TimTest
             ->noUnread(true)
             ->noLastMsg(true)
             ->withMuteNotifications(true)
-            ->setOfflinePushInfo([])
+            ->setOfflinePushInfo(new OfflinePushInfo(0, '这是推送标题', '这是离线推送内容', '这是透传的内容'))
             ->sendMsg('@100001', '101', GroupMsgPriority::Normal, false);
         $this->assertSame('OK', $result['ActionStatus']);
     }
