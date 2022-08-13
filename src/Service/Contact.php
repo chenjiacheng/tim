@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Chenjiacheng\Tim\Service;
 
+use Chenjiacheng\Tim\Constant\ChatType;
+use Chenjiacheng\Tim\Exception\InvalidArgumentException;
 use Chenjiacheng\Tim\Exception\InvalidConfigException;
 use Chenjiacheng\Tim\Support\Collection;
 use GuzzleHttp\Exception\GuzzleException;
@@ -43,53 +45,38 @@ class Contact extends AbstractService
     }
 
     /**
-     * 删除单个C2C会话
+     * 删除单个会话
      *
      * @see https://cloud.tencent.com/document/product/269/62119
      *
      * @param string|int $fromUserId 请求删除该 UserID 的会话
-     * @param string|int $toUserId 会话方的 UserID
+     * @param string|int $toId 会话方的 ID
+     * @param string $chatType 会话类型：ChatType::C2C 表示 C2C 会话；ChatType::GROUP 表示 G2C 会话
      * @param bool $clearRamble 是否清理漫游消息
      *
-     * @return \Chenjiacheng\Tim\Support\Collection
+     * @return Collection
      *
+     * @throws InvalidArgumentException
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function deleteC2C(string|int $fromUserId, string|int $toUserId, bool $clearRamble = true): Collection
+    public function delete(string|int $fromUserId, string|int $toId,
+                           string $chatType = ChatType::C2C, bool $clearRamble = true): Collection
     {
+        if (!in_array($chatType, [ChatType::C2C, ChatType::GROUP])) {
+            throw new InvalidArgumentException(sprintf('Unsupported chat type "%s"', $chatType));
+        }
         return $this->httpPostJson(
             'v4/recentcontact/delete',
-            [
+            $chatType == ChatType::C2C ? [
                 'Type'         => 1,
                 'From_Account' => (string)$fromUserId,
-                'To_Account'   => (string)$toUserId,
+                'To_Account'   => (string)$toId,
                 'ClearRamble'  => $clearRamble ? 1 : 0,
-            ]);
-    }
-
-    /**
-     * 删除单个G2C会话
-     *
-     * @see https://cloud.tencent.com/document/product/269/62119
-     *
-     * @param string|int $fromUserId 请求删除该 UserID 的会话
-     * @param string $toGroupId 会话的群 ID
-     * @param bool $clearRamble 是否清理漫游消息
-     *
-     * @return \Chenjiacheng\Tim\Support\Collection
-     *
-     * @throws InvalidConfigException
-     * @throws GuzzleException
-     */
-    public function deleteG2C(string|int $fromUserId, string $toGroupId, bool $clearRamble = true): Collection
-    {
-        return $this->httpPostJson(
-            'v4/recentcontact/delete',
-            [
+            ] : [
                 'Type'         => 2,
                 'From_Account' => (string)$fromUserId,
-                'ToGroupid'    => $toGroupId,
+                'ToGroupid'    => (string)$toId,
                 'ClearRamble'  => $clearRamble ? 1 : 0,
             ]);
     }

@@ -69,40 +69,40 @@ $tim->message
     ->setTIMImageElem('image_url') // 设置图像消息
     ->setTIMImageElem([
         [
-            'type' => 1, // 原图
-            'size' => 1853095,
-            'width' => 2448,
+            'type'   => 1, // 原图
+            'size'   => 1853095,
+            'width'  => 2448,
             'height' => 3264,
-            'url' => 'http://xxx/3200490432214177468_144115198371610486_D61040894AC3DE44CDFFFB3EC7EB720F/0',
+            'url'    => 'http://xxx/3200490432214177468_144115198371610486_D61040894AC3DE44CDFFFB3EC7EB720F/0',
         ],
         [
-            'type' => 2, // 大图
-            'size' => 2565240,
-            'width' => 0,
+            'type'   => 2, // 大图
+            'size'   => 2565240,
+            'width'  => 0,
             'height' => 0,
-            'url' => 'http://xxx/3200490432214177468_144115198371610486_D61040894AC3DE44CDFFFB3EC7EB720F/720',
+            'url'    => 'http://xxx/3200490432214177468_144115198371610486_D61040894AC3DE44CDFFFB3EC7EB720F/720',
         ],
         [
-            'type' => 3, // 缩略图
-            'size' => 12535,
-            'width' => 0,
+            'type'   => 3, // 缩略图
+            'size'   => 12535,
+            'width'  => 0,
             'height' => 0,
-            'url' => 'http://xxx/3200490432214177468_144115198371610486_D61040894AC3DE44CDFFFB3EC7EB720F/198',
+            'url'    => 'http://xxx/3200490432214177468_144115198371610486_D61040894AC3DE44CDFFFB3EC7EB720F/198',
         ]
     ]) // 设置图像消息
     ->setTIMFileElem('file_url') // 设置文件消息
     ->setTIMVideoFileElem('video_url', 'thumb_url') // 设置视频消息
     ->setTIMVideoFileElem([
-        'url' => 'https://0345-1400187352-1256635546.cos.ap-shanghai.myqcloud.com/abcd/f7c6ad3c50af7d83e23efe0a208b90c9',
-        'uuid' => '5da38ba89d6521011e1f6f3fd6692e35',
-        'size' => 1194603,
+        'url'    => 'https://0345-1400187352-1256635546.cos.ap-shanghai.myqcloud.com/abcd/f7c6ad3c50af7d83e23efe0a208b90c9',
+        'uuid'   => '5da38ba89d6521011e1f6f3fd6692e35',
+        'size'   => 1194603,
         'second' => 5,
         'format' => 'mp4',
     ], [
-        'url' => 'https://0345-1400187352-1256635546.cos.ap-shanghai.myqcloud.com/abcd/a6c170c9c599280cb06e0523d7a1f37b',
-        'uuid' => '6edaffedef5150684510cf97957b7bc8',
-        'size' => 13907,
-        'width' => 720,
+        'url'    => 'https://0345-1400187352-1256635546.cos.ap-shanghai.myqcloud.com/abcd/a6c170c9c599280cb06e0523d7a1f37b',
+        'uuid'   => '6edaffedef5150684510cf97957b7bc8',
+        'size'   => 13907,
+        'width'  => 720,
         'height' => 1280,
         'format' => 'JPG',
     ]) // 设置视频消息
@@ -208,7 +208,11 @@ $tim->message
     ->pushAllMember('101', 86400);
 
 // 设置应用属性名称
-$tim->setAppAttr(['0' => 'sex', '1' => 'city', '2' => 'country']);
+$tim->setAppAttr([
+    '0' => 'sex',
+    '1' => 'city',
+    '2' => 'country'
+]);
 
 // 获取应用属性名称
 $tim->getAppAttr();
@@ -220,11 +224,11 @@ $tim->getUserAttr('101');
 // 设置用户属性
 $tim->setUserAttr([
     '101' => [
-        'sex' => 'attr1',
+        'sex'  => 'attr1',
         'city' => 'attr2',
     ],
     '102' => [
-        'sex' => 'attr3',
+        'sex'  => 'attr3',
         'city' => 'attr4',
     ]
 ]);
@@ -279,9 +283,9 @@ $tim->removeUserAllTags('101');
 ```php
 // 设置资料
 $tim->profile->set('101', [
-    ProfileTag::NICK              => 'user101',
-    ProfileTag::GENDER            => ProfileGenderType::MALE,
-    ProfileTag::BIRTHDAY          => 20220801,
+    ProfileTag::NICK     => 'user101',
+    ProfileTag::GENDER   => ProfileGenderType::MALE,
+    ProfileTag::BIRTHDAY => 20220801,
     // ...
 ]);
 
@@ -420,11 +424,9 @@ $tim->sms->group('101')->delete('group3');
 // 拉取会话列表
 $tim->contact->getList('101');
 
-// 删除单个C2C会话
-$tim->contact->deleteC2C('101', '102');
-
-// 删除单个G2C会话
-$tim->contact->deleteG2C('101', '@#123456');
+// 删除单个会话
+$tim->contact->delete('101', '102'); // 删除单聊会话
+$tim->contact->delete('101', '@#123456', ChatType::GROUP); // 删除群组会话
 ```
 
 群组管理
@@ -457,6 +459,24 @@ $tim->operate->getHistory(date('YmdH', time() - 86400));
 
 // 获取服务器 IP 地址
 $tim->operate->getIPList();
+
+// 聊天文件封禁
+$tim->forbidIllegalObject('https://cos.ap-shanghai.myqcloud.com/005f-shanghai-360-shared-01-1256635546/76aa-1400152839/2f3b-2273451635034382/699eb4ee5ffa9aeb70627958766f2927-142072.jpg');
+
+// 聊天文件解封
+$tim->allowBannedObject('https://cos.ap-shanghai.myqcloud.com/98ec-shanghai-007-privatev2-01-1256635546/0345-1400187352/0612-yyy/9a0f4c42d208ccfb5aa47c29284aefc6.png');
+
+// 聊天文件签名
+$tim->getCosSig([
+    [
+        'ResourceID' => 1,
+        'RawURL'     => 'https://cos.ap-shanghai.myqcloud.com/98ec-shanghai-007-privatev2-01-1256635546/0345-1400187352/0612-yyy/9a0f4c42d208ccfb5aa47c29284aefc6.png',
+    ],
+    [
+        'ResourceID' => 2,
+        'RawURL'     => 'https://cos.ap-shanghai.myqcloud.com/98ec-shanghai-007-privatev2-01-1256635546/0345-1400187352/0612-yyy/9a0f4c42d208ccfb5aa47c29284aefc7.png',
+    ]
+]);
 ```
 
 ## License

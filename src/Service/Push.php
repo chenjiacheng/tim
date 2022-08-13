@@ -261,6 +261,7 @@ class Push extends AbstractService
 
     /**
      * @param array $tags
+     *
      * @return $this
      */
     public function tagsAnd(array $tags): Push
@@ -273,6 +274,7 @@ class Push extends AbstractService
 
     /**
      * @param array $tags
+     *
      * @return $this
      */
     public function tagsOr(array $tags): Push
@@ -285,6 +287,7 @@ class Push extends AbstractService
 
     /**
      * @param array $attrs
+     *
      * @return $this
      */
     public function attrsAnd(array $attrs): Push
@@ -297,6 +300,7 @@ class Push extends AbstractService
 
     /**
      * @param array $attrs
+     *
      * @return $this
      */
     public function attrsOr(array $attrs): Push

@@ -21,8 +21,8 @@ class Overall extends AbstractService
      *
      * @return Collection
      *
-     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function setNoSpeaking(string|int $setAccount, int $C2CMsgNoSpeakingTime = null, int $groupMsgNoSpeakingTime = null): Collection
     {
