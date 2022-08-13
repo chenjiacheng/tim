@@ -8,6 +8,7 @@ use Chenjiacheng\Tim\Constant\GroupType;
 use Chenjiacheng\Tim\Exception\InvalidConfigException;
 use Chenjiacheng\Tim\Service\Group\GroupInfo;
 use Chenjiacheng\Tim\Service\Group\GroupInfoResponseFilter;
+use Chenjiacheng\Tim\Service\Group\GroupMemberList;
 use Chenjiacheng\Tim\Service\Group\GroupMemberResponseFilter;
 use Chenjiacheng\Tim\Service\Group\GroupMsgList;
 use Chenjiacheng\Tim\Service\Group\JoinedGroupResponseFilter;
@@ -683,21 +684,20 @@ class Group extends AbstractService
      * @see https://cloud.tencent.com/document/product/269/1636
      *
      * @param string $groupId 操作的群 ID
-     * @param array $memberList 待添加的群成员数组
+     * @param GroupMemberList $groupMemberList 待添加的群成员数组
      *
      * @return Collection
      *
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function importMember(string $groupId, array $memberList): Collection
+    public function importMember(string $groupId, GroupMemberList $groupMemberList): Collection
     {
-        // TODO 优化 MemberList
         return $this->httpPostJson(
             'v4/group_open_http_svc/import_group_member',
             [
                 'GroupId'    => $groupId,
-                'MemberList' => $memberList,
+                'MemberList' => $groupMemberList->getMemberList(),
             ]);
     }
 

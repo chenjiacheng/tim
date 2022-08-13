@@ -582,7 +582,10 @@ $tim->group->importMsg('@100001', new GroupMsgList(
 ));
 
 // 导入群成员
-
+$tim->group->importMember('@100001', new GroupMemberList(
+    (new GroupMemberItem('101')),
+    (new GroupMemberItem('102', 'Admin', time(), 10)),
+));
 
 // 设置成员未读消息计数
 $tim->group->setUnreadMsgNum('@100001', '101', 10);

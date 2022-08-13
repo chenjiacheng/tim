@@ -11,6 +11,8 @@ use Chenjiacheng\Tim\Constant\GroupMuteAllMember;
 use Chenjiacheng\Tim\Constant\GroupType;
 use Chenjiacheng\Tim\Service\Group\GroupInfo;
 use Chenjiacheng\Tim\Service\Group\GroupInfoResponseFilter;
+use Chenjiacheng\Tim\Service\Group\GroupMemberItem;
+use Chenjiacheng\Tim\Service\Group\GroupMemberList;
 use Chenjiacheng\Tim\Service\Group\GroupMemberResponseFilter;
 use Chenjiacheng\Tim\Service\Group\GroupMsgItem;
 use Chenjiacheng\Tim\Service\Group\GroupMsgList;
@@ -376,6 +378,21 @@ class GroupTest extends TimTest
         $result = $tim->group->importMsg('@100001', new GroupMsgList(
             (new GroupMsgItem('101', time() - 86400))->setTIMTextElem('hello'),
             (new GroupMsgItem('101', time() - 86400))->setTIMLocationElem('深圳', 114.05, 22.55),
+        ));
+        $this->assertSame('OK', $result['ActionStatus']);
+    }
+
+    /**
+     * @throws \Chenjiacheng\Tim\Exception\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function testImportMember()
+    {
+        $tim = new Tim($this->config);
+
+        $result = $tim->group->importMember('@100001', new GroupMemberList(
+            (new GroupMemberItem('101')),
+            (new GroupMemberItem('102', 'Admin', time(), 10)),
         ));
         $this->assertSame('OK', $result['ActionStatus']);
     }
