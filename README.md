@@ -7,7 +7,7 @@
 [![Total Downloads](https://poser.pugx.org/chenjiacheng/tim/downloads)](https://packagist.org/packages/chenjiacheng/tim)
 [![License](https://poser.pugx.org/chenjiacheng/tim/license)](https://packagist.org/packages/chenjiacheng/tim)
 
-Laravel 扩展包：[chenjiacheng/laravel-tim](https://github.com/chenjiacheng/laravel-tim)
+Laravel 扩展包：[传送门](https://github.com/chenjiacheng/laravel-tim)
 
 ## 运行环境
 
