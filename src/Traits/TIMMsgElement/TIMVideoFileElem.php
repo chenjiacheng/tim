@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chenjiacheng\Tim\Traits\TIMMsgElement;
 
+use Chenjiacheng\Tim\Constant\MsgType;
 use Chenjiacheng\Tim\Contract\TIMMsgInterface;
 
 class TIMVideoFileElem implements TIMMsgInterface
@@ -43,7 +44,7 @@ class TIMVideoFileElem implements TIMMsgInterface
     public function output(): array
     {
         return [
-            'MsgType'    => 'TIMVideoFileElem',
+            'MsgType'    => MsgType::TIM_VIDEO_FILE_ELEM,
             'MsgContent' => [
                 'VideoUrl'          => $this->videoUrl,
                 'VideoUUID'         => $this->videoUUID,

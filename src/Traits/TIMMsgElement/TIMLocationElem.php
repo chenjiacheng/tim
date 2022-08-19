@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chenjiacheng\Tim\Traits\TIMMsgElement;
 
+use Chenjiacheng\Tim\Constant\MsgType;
 use Chenjiacheng\Tim\Contract\TIMMsgInterface;
 
 class TIMLocationElem implements TIMMsgInterface
@@ -20,7 +21,7 @@ class TIMLocationElem implements TIMMsgInterface
     public function output(): array
     {
         return [
-            'MsgType'    => 'TIMLocationElem',
+            'MsgType'    => MsgType::TIM_LOCATION_ELEM,
             'MsgContent' => [
                 'Desc'      => $this->dec,
                 'Latitude'  => $this->latitude,

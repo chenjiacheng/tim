@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chenjiacheng\Tim\Traits\TIMMsgElement;
 
+use Chenjiacheng\Tim\Constant\MsgType;
 use Chenjiacheng\Tim\Contract\TIMMsgInterface;
 
 class TIMImageElem implements TIMMsgInterface
@@ -20,7 +21,7 @@ class TIMImageElem implements TIMMsgInterface
     public function output(): array
     {
         return [
-            'MsgType'    => 'TIMImageElem',
+            'MsgType'    => MsgType::TIM_IMAGE_ELEM,
             'MsgContent' => [
                 'UUID'           => $this->uuid,
                 'ImageFormat'    => $this->imageFormat,

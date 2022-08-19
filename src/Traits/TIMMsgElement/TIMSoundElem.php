@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chenjiacheng\Tim\Traits\TIMMsgElement;
 
+use Chenjiacheng\Tim\Constant\MsgType;
 use Chenjiacheng\Tim\Contract\TIMMsgInterface;
 
 class TIMSoundElem implements TIMMsgInterface
@@ -22,7 +23,7 @@ class TIMSoundElem implements TIMMsgInterface
     public function output(): array
     {
         return [
-            'MsgType'    => 'TIMSoundElem',
+            'MsgType'    => MsgType::TIM_SOUND_ELEM,
             'MsgContent' => [
                 'Url'           => $this->url,
                 'UUID'          => $this->uuid,

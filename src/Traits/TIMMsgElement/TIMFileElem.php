@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chenjiacheng\Tim\Traits\TIMMsgElement;
 
+use Chenjiacheng\Tim\Constant\MsgType;
 use Chenjiacheng\Tim\Contract\TIMMsgInterface;
 
 class TIMFileElem implements TIMMsgInterface
@@ -22,7 +23,7 @@ class TIMFileElem implements TIMMsgInterface
     public function output(): array
     {
         return [
-            'MsgType'    => 'TIMFileElem',
+            'MsgType'    => MsgType::TIM_FILE_ELEM,
             'MsgContent' => [
                 'Url'           => $this->url,
                 'UUID'          => $this->uuid,

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chenjiacheng\Tim\Traits\TIMMsgElement;
 
+use Chenjiacheng\Tim\Constant\MsgType;
 use Chenjiacheng\Tim\Contract\TIMMsgInterface;
 
 class TIMCustomElem implements TIMMsgInterface
@@ -21,7 +22,7 @@ class TIMCustomElem implements TIMMsgInterface
     public function output(): array
     {
         return [
-            'MsgType'    => 'TIMCustomElem',
+            'MsgType'    => MsgType::TIM_CUSTOM_ELEM,
             'MsgContent' => [
                 'Data'  => $this->data,
                 'Desc'  => $this->desc,
