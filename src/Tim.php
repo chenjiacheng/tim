@@ -23,10 +23,11 @@ use Chenjiacheng\Tim\Service\Overall;
 use Chenjiacheng\Tim\Service\Profile;
 use Chenjiacheng\Tim\Service\Push;
 use Chenjiacheng\Tim\Service\Sns;
+use Chenjiacheng\Tim\Support\Config;
 use Pimple\Container;
 
 /**
- * @property array $config
+ * @property Config $config
  * @property Account $account
  * @property Contact $contact
  * @property Group $group

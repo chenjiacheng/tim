@@ -32,9 +32,9 @@ abstract class AbstractService
     {
         $uri .= '?';
         $uri .= http_build_query([
-            'sdkappid'    => $this->app->config['sdkappid'],
-            'identifier'  => $this->app->config['identifier'],
-            'usersig'     => $this->genUserSig($this->app->config['identifier']),
+            'sdkappid'    => $this->app->config->get('sdkappid'),
+            'identifier'  => $this->app->config->get('identifier'),
+            'usersig'     => $this->genUserSig($this->app->config->get('identifier')),
             'random'      => $this->getRandom(),
             'contenttype' => 'json',
         ]);
@@ -46,7 +46,7 @@ abstract class AbstractService
             ]
         ];
 
-        $httpClient = new Client($this->app->config['http']);
+        $httpClient = new Client($this->app->config->get('http'));
 
         $response = $httpClient->post($uri, $options);
         $contents = $response->getBody()->getContents();
@@ -67,17 +67,17 @@ abstract class AbstractService
         $currTime = time();
 
         $contentToBeSigned = 'TLS.identifier:' . $identifier . "\n"
-            . 'TLS.sdkappid:' . $this->app->config['sdkappid'] . "\n"
+            . 'TLS.sdkappid:' . $this->app->config->get('sdkappid') . "\n"
             . 'TLS.time:' . $currTime . "\n"
             . 'TLS.expire:' . $expire . "\n";
 
         $sigArray = [
             'TLS.ver'        => '2.0',
             'TLS.identifier' => $identifier,
-            'TLS.sdkappid'   => intval($this->app->config['sdkappid']),
+            'TLS.sdkappid'   => intval($this->app->config->get('sdkappid')),
             'TLS.expire'     => $expire,
             'TLS.time'       => $currTime,
-            'TLS.sig'        => base64_encode(hash_hmac('sha256', $contentToBeSigned, $this->app->config['key'], true))
+            'TLS.sig'        => base64_encode(hash_hmac('sha256', $contentToBeSigned, $this->app->config->get('key'), true))
         ];
 
         $jsonStrSig = json_encode($sigArray);
