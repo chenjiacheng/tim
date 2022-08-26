@@ -7,13 +7,13 @@ namespace Chenjiacheng\Tim\Tests\Service;
 use Chenjiacheng\Tim\Tests\TimTest;
 use Chenjiacheng\Tim\Tim;
 
-class SmsTest extends TimTest
+class SnsTest extends TimTest
 {
     public function testBlack()
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->sms->black('105');
+        $result = $tim->sns->black('105');
         $this->assertIsObject($result);
     }
 }

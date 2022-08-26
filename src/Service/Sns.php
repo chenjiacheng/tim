@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Chenjiacheng\Tim\Service;
 
-use Chenjiacheng\Tim\Service\Sms\Black;
-use Chenjiacheng\Tim\Service\Sms\Friend;
-use Chenjiacheng\Tim\Service\Sms\Group;
+use Chenjiacheng\Tim\Service\Sns\Black;
+use Chenjiacheng\Tim\Service\Sns\Friend;
+use Chenjiacheng\Tim\Service\Sns\Group;
 
-class Sms extends AbstractService
+class Sns extends AbstractService
 {
     /**
      * 黑名单管理

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chenjiacheng\Tim\Service\Sms;
+namespace Chenjiacheng\Tim\Service\Sns;
 
 use Chenjiacheng\Tim\Constant\BlackCheckType;
 use Chenjiacheng\Tim\Exception\InvalidArgumentException;

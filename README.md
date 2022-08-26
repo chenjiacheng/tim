@@ -319,7 +319,7 @@ $tim->profile->get('101', [
 
 ```php
 // 添加好友
-$tim->sms->friend('101')->add([
+$tim->sns->friend('101')->add([
     [
         'To_Account' => '102',
     ],
@@ -333,7 +333,7 @@ $tim->sms->friend('101')->add([
 ]);
 
 // 导入好友
-$tim->sms->friend('101')->import([
+$tim->sns->friend('101')->import([
     [
         'To_Account' => '104',
         'AddSource'  => 'AddSource_Type_XXXXXXXX',
@@ -354,7 +354,7 @@ $tim->sms->friend('101')->import([
 ]);
 
 // 更新好友
-$tim->sms->friend('101')->update([
+$tim->sns->friend('101')->update([
     [
         'To_Account' => '102',
         'SnsItem'    => [
@@ -372,27 +372,27 @@ $tim->sms->friend('101')->update([
 ]);
 
 // 删除好友
-$tim->sms->friend('101')->delete(['102', 103]);
-$tim->sms->friend('101')->delete('104');
+$tim->sns->friend('101')->delete(['102', 103]);
+$tim->sns->friend('101')->delete('104');
 
 // 删除所有好友
-$tim->sms->friend('101')->deleteAll();
+$tim->sns->friend('101')->deleteAll();
 
 // 校验好友
-$tim->sms->friend('101')->check(['102', 103]);
-$tim->sms->friend('101')->check('104');
+$tim->sns->friend('101')->check(['102', 103]);
+$tim->sns->friend('101')->check('104');
 
 // 拉取好友
-$tim->sms->friend('101')->get();
+$tim->sns->friend('101')->get();
 
 // 拉取指定好友
-$tim->sms->friend('101')->getList(['102', 103], [
+$tim->sns->friend('101')->getList(['102', 103], [
     ProfileTag::NICK,
     ProfileTag::GENDER,
     ProfileTag::BIRTHDAY,
     // ...
 ]);
-$tim->sms->friend('101')->getList('104', [
+$tim->sns->friend('101')->getList('104', [
     ProfileTag::NICK,
     ProfileTag::GENDER,
     ProfileTag::BIRTHDAY,
@@ -400,33 +400,33 @@ $tim->sms->friend('101')->getList('104', [
 ]);
 
 // 添加黑名单
-$tim->sms->black('101')->add(['103', 104]);
-$tim->sms->black('101')->add('105');
+$tim->sns->black('101')->add(['103', 104]);
+$tim->sns->black('101')->add('105');
 
 // 拉取黑名单
-$tim->sms->black('101')->get();
-$tim->sms->black(102)->get(0, 2);
+$tim->sns->black('101')->get();
+$tim->sns->black(102)->get(0, 2);
 
 // 检验黑名单
-$tim->sms->black('101')->check(['103', 104]);
-$tim->sms->black('101')->check('105', BlackCheckType::BOTH);
+$tim->sns->black('101')->check(['103', 104]);
+$tim->sns->black('101')->check('105', BlackCheckType::BOTH);
 
 // 删除黑名单
-$tim->sms->black('101')->delete(['103', 104]);
-$tim->sms->black('101')->delete('105');
+$tim->sns->black('101')->delete(['103', 104]);
+$tim->sns->black('101')->delete('105');
 
 // 添加分组
-$tim->sms->group('101')->add(['group1', 'group2']);
-$tim->sms->group('101')->add('group3');
+$tim->sns->group('101')->add(['group1', 'group2']);
+$tim->sns->group('101')->add('group3');
 
 // 删除分组
-$tim->sms->group('101')->get();
-$tim->sms->group('101')->get(['group1', 'group2']);
-$tim->sms->group('101')->get('group3', true);
+$tim->sns->group('101')->get();
+$tim->sns->group('101')->get(['group1', 'group2']);
+$tim->sns->group('101')->get('group3', true);
 
 // 拉取分组
-$tim->sms->group('101')->delete(['group1', 'group2']);
-$tim->sms->group('101')->delete('group3');
+$tim->sns->group('101')->delete(['group1', 'group2']);
+$tim->sns->group('101')->delete('group3');
 ```
 
 最近联系人

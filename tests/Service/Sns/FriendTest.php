@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chenjiacheng\Tim\Tests\Service\Sms;
+namespace Chenjiacheng\Tim\Tests\Service\Sns;
 
 use Chenjiacheng\Tim\Constant\FriendTag;
 use Chenjiacheng\Tim\Constant\ProfileTag;
@@ -20,7 +20,7 @@ class FriendTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->sms->friend('101')->add([
+        $result = $tim->sns->friend('101')->add([
             [
                 'To_Account' => '102',
             ],
@@ -43,7 +43,7 @@ class FriendTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->sms->friend('101')->import([
+        $result = $tim->sns->friend('101')->import([
             [
                 'To_Account' => '104',
                 'AddSource'  => 'AddSource_Type_XXXXXXXX',
@@ -73,7 +73,7 @@ class FriendTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->sms->friend('101')->update([
+        $result = $tim->sns->friend('101')->update([
             [
                 'To_Account' => '102',
                 'SnsItem'    => [
@@ -100,13 +100,13 @@ class FriendTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->sms->friend('101')->check(['102', 103]);
+        $result = $tim->sns->friend('101')->check(['102', 103]);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->friend('101')->check('104');
+        $result = $tim->sns->friend('101')->check('104');
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->friend('101')->check(105);
+        $result = $tim->sns->friend('101')->check(105);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -118,7 +118,7 @@ class FriendTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->sms->friend('101')->get();
+        $result = $tim->sns->friend('101')->get();
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -130,7 +130,7 @@ class FriendTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->sms->friend('101')->getList(['102', 103], [
+        $result = $tim->sns->friend('101')->getList(['102', 103], [
             ProfileTag::NICK,
             ProfileTag::GENDER,
             ProfileTag::BIRTHDAY,
@@ -145,7 +145,7 @@ class FriendTest extends TimTest
         ]);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->friend('101')->getList('104', [
+        $result = $tim->sns->friend('101')->getList('104', [
             ProfileTag::NICK,
             ProfileTag::GENDER,
             ProfileTag::BIRTHDAY,
@@ -154,7 +154,7 @@ class FriendTest extends TimTest
         ]);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->friend('101')->getList(105, [
+        $result = $tim->sns->friend('101')->getList(105, [
             ProfileTag::ALLOW_TYPE,
             ProfileTag::LANGUAGE,
             ProfileTag::IMAGE,
@@ -174,13 +174,13 @@ class FriendTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->sms->friend('101')->delete(['102', 103]);
+        $result = $tim->sns->friend('101')->delete(['102', 103]);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->friend('101')->delete('104');
+        $result = $tim->sns->friend('101')->delete('104');
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->friend('101')->delete(105);
+        $result = $tim->sns->friend('101')->delete(105);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -193,7 +193,7 @@ class FriendTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->sms->friend('101')->deleteAll();
+        $result = $tim->sns->friend('101')->deleteAll();
         $this->assertSame('OK', $result['ActionStatus']);
     }
 }

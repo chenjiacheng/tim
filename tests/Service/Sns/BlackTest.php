@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chenjiacheng\Tim\Tests\Service\Sms;
+namespace Chenjiacheng\Tim\Tests\Service\Sns;
 
 use Chenjiacheng\Tim\Constant\BlackCheckType;
 use Chenjiacheng\Tim\Tests\TimTest;
@@ -18,22 +18,22 @@ class BlackTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->sms->black('101')->add(['103', 104]);
+        $result = $tim->sns->black('101')->add(['103', 104]);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->black('101')->add('105');
+        $result = $tim->sns->black('101')->add('105');
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->black('101')->add(106);
+        $result = $tim->sns->black('101')->add(106);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->black(102)->add(['103', 104]);
+        $result = $tim->sns->black(102)->add(['103', 104]);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->black(102)->add('105');
+        $result = $tim->sns->black(102)->add('105');
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->black(102)->add(106);
+        $result = $tim->sns->black(102)->add(106);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -45,19 +45,19 @@ class BlackTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->sms->black('101')->get();
+        $result = $tim->sns->black('101')->get();
         $this->assertSame('OK', $result['ActionStatus']);
 
         // 第1页
-        $result = $tim->sms->black(102)->get(0, 2);
+        $result = $tim->sns->black(102)->get(0, 2);
         $this->assertSame('OK', $result['ActionStatus']);
 
         // 第2页
-        $result = $tim->sms->black(102)->get(2, 2, $result['CurruentSequence']);
+        $result = $tim->sns->black(102)->get(2, 2, $result['CurruentSequence']);
         $this->assertSame('OK', $result['ActionStatus']);
 
         // 第3页
-        $result = $tim->sms->black(102)->get(4, 2, $result['CurruentSequence']);
+        $result = $tim->sns->black(102)->get(4, 2, $result['CurruentSequence']);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -70,22 +70,22 @@ class BlackTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->sms->black('101')->check(['103', 104]);
+        $result = $tim->sns->black('101')->check(['103', 104]);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->black('101')->check('105', BlackCheckType::BOTH);
+        $result = $tim->sns->black('101')->check('105', BlackCheckType::BOTH);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->black('101')->check(106);
+        $result = $tim->sns->black('101')->check(106);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->black(102)->check(['103', 104], BlackCheckType::BOTH);
+        $result = $tim->sns->black(102)->check(['103', 104], BlackCheckType::BOTH);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->black(102)->check('105');
+        $result = $tim->sns->black(102)->check('105');
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->black(102)->check(106, BlackCheckType::BOTH);
+        $result = $tim->sns->black(102)->check(106, BlackCheckType::BOTH);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -97,22 +97,22 @@ class BlackTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->sms->black('101')->delete(['103', 104]);
+        $result = $tim->sns->black('101')->delete(['103', 104]);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->black('101')->delete('105');
+        $result = $tim->sns->black('101')->delete('105');
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->black('101')->delete(106);
+        $result = $tim->sns->black('101')->delete(106);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->black(102)->delete(['103', 104]);
+        $result = $tim->sns->black(102)->delete(['103', 104]);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->black(102)->delete('105');
+        $result = $tim->sns->black(102)->delete('105');
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->black(102)->delete(106);
+        $result = $tim->sns->black(102)->delete(106);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 }

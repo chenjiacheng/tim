@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chenjiacheng\Tim\Tests\Service\Sms;
+namespace Chenjiacheng\Tim\Tests\Service\Sns;
 
 use Chenjiacheng\Tim\Tests\TimTest;
 use Chenjiacheng\Tim\Tim;
@@ -17,10 +17,10 @@ class GroupTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->sms->group('101')->add(['group1', 'group2']);
+        $result = $tim->sns->group('101')->add(['group1', 'group2']);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->group('101')->add('group3');
+        $result = $tim->sns->group('101')->add('group3');
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -32,13 +32,13 @@ class GroupTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->sms->group('101')->get();
+        $result = $tim->sns->group('101')->get();
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->group('101')->get(['group1', 'group2']);
+        $result = $tim->sns->group('101')->get(['group1', 'group2']);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->group('101')->get('group3', true);
+        $result = $tim->sns->group('101')->get('group3', true);
         $this->assertSame('OK', $result['ActionStatus']);
     }
 
@@ -50,10 +50,10 @@ class GroupTest extends TimTest
     {
         $tim = new Tim($this->config);
 
-        $result = $tim->sms->group('101')->delete(['group1', 'group2']);
+        $result = $tim->sns->group('101')->delete(['group1', 'group2']);
         $this->assertSame('OK', $result['ActionStatus']);
 
-        $result = $tim->sms->group('101')->delete('group3');
+        $result = $tim->sns->group('101')->delete('group3');
         $this->assertSame('OK', $result['ActionStatus']);
     }
 }

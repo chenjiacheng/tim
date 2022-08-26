@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chenjiacheng\Tim\Service\Sms;
+namespace Chenjiacheng\Tim\Service\Sns;
 
 use Chenjiacheng\Tim\Constant\FriendAddType;
 use Chenjiacheng\Tim\Constant\FriendCheckType;

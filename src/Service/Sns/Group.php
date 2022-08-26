@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chenjiacheng\Tim\Service\Sms;
+namespace Chenjiacheng\Tim\Service\Sns;
 
 use Chenjiacheng\Tim\Exception\InvalidConfigException;
 use Chenjiacheng\Tim\Service\AbstractService;
