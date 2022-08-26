@@ -8,6 +8,7 @@ use Chenjiacheng\Tim\Provider\AccountServiceProvider;
 use Chenjiacheng\Tim\Provider\ConfigServiceProvider;
 use Chenjiacheng\Tim\Provider\ContactServiceProvider;
 use Chenjiacheng\Tim\Provider\GroupServiceProvider;
+use Chenjiacheng\Tim\Provider\HttpClientServiceProvider;
 use Chenjiacheng\Tim\Provider\MessageServiceProvider;
 use Chenjiacheng\Tim\Provider\OperateServiceProvider;
 use Chenjiacheng\Tim\Provider\OverallServiceProvider;
@@ -24,10 +25,10 @@ use Chenjiacheng\Tim\Service\Profile;
 use Chenjiacheng\Tim\Service\Push;
 use Chenjiacheng\Tim\Service\Sns;
 use Chenjiacheng\Tim\Support\Config;
+use GuzzleHttp\Client;
 use Pimple\Container;
 
 /**
- * @property Config $config
  * @property Account $account
  * @property Contact $contact
  * @property Group $group
@@ -37,6 +38,8 @@ use Pimple\Container;
  * @property Profile $profile
  * @property Push $push
  * @property Sns $sns
+ * @property Config $config
+ * @property Client $httpClient
  */
 class Tim extends Container
 {
@@ -102,6 +105,7 @@ class Tim extends Container
     {
         return array_merge([
             ConfigServiceProvider::class,
+            HttpClientServiceProvider::class,
         ], $this->providers);
     }
 

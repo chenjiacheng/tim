@@ -7,7 +7,6 @@ namespace Chenjiacheng\Tim\Service;
 use Chenjiacheng\Tim\Exception\InvalidConfigException;
 use Chenjiacheng\Tim\Support\Collection;
 use Chenjiacheng\Tim\Tim;
-use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
 abstract class AbstractService
@@ -46,9 +45,7 @@ abstract class AbstractService
             ]
         ];
 
-        $httpClient = new Client($this->app->config->get('http'));
-
-        $response = $httpClient->post($uri, $options);
+        $response = $this->app->httpClient->post($uri, $options);
         $contents = $response->getBody()->getContents();
 
         return new Collection(json_decode($contents, true));
