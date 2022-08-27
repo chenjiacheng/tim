@@ -9,6 +9,8 @@
 
 Laravel 扩展包：[传送门](https://github.com/chenjiacheng/laravel-tim)
 
+Hyperf 扩展包：[传送门](https://github.com/chenjiacheng/hyperf-tim)
+
 ## 运行环境
 
 - PHP >= 8.0.2
