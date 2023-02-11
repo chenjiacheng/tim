@@ -726,6 +726,19 @@ $tim->getCosSig([
 ]);
 ```
 
+第三方回调
+
+```php
+// 回调签名校验
+$tim->callback->verify('sign', 'requestTime', 'token');
+
+// 回调处理成功应答
+$tim->callback->ok();
+
+// 回调处理失败应答
+$tim->callback->fail();
+```
+
 ## License
 
 MIT
