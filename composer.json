@@ -1,0 +1,35 @@
+{
+    "name": "chenjiacheng/tim",
+    "description": "腾讯云 即时通信 IM SDK for PHP",
+    "type": "library",
+    "keywords": [
+        "php",
+        "im"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "chenjiacheng",
+            "email": "405339556@qq.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.0.2",
+        "ext-zlib": "*",
+        "guzzlehttp/guzzle": "^7.4",
+        "pimple/pimple": "^3.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Chenjiacheng\\Tim\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Chenjiacheng\\Tim\\Tests\\": "tests"
+        }
+    }
+}
