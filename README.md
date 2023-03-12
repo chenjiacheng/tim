@@ -18,7 +18,7 @@ Hyperf 扩展包：[传送门](https://github.com/chenjiacheng/hyperf-tim)
 
 ## 相关文档
 
-[Tencent IM](https://cloud.tencent.com/document/product/269/1519)
+[https://chenjiacheng.github.io/tim](https://chenjiacheng.github.io/tim)
 
 ## 安装方式
 
